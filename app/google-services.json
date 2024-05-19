@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "423667687570",
+    "project_id": "mocom-db",
+    "storage_bucket": "mocom-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423667687570:android:2c9e1be07ff12b0d47464b",
+        "android_client_info": {
+          "package_name": "com.example.konsulsehat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlzXU7NoeadquAEhu0oWtnP66W07JNb0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
