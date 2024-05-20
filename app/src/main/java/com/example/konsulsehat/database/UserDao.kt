@@ -1,4 +1,4 @@
-package com.example.konsulsehat
+package com.example.konsulsehat.database
 
 import androidx.room.Delete
 import androidx.room.Insert
@@ -7,13 +7,13 @@ import androidx.room.Update
 
 interface UserDao {
     @Insert
-    fun insert(user:UserEntity)
+    fun insert(user: UserEntity)
 
     @Update
-    fun update(user:UserEntity)
+    fun update(user: UserEntity)
 
     @Delete
-    fun delete(user:UserEntity)
+    fun delete(user: UserEntity)
 
     @Query("DELETE FROM users where username = :username")
     fun deleteQuery(username: String):Int //return Int jika mau tau brp row yg kehapus
@@ -22,7 +22,7 @@ interface UserDao {
     fun fetch():List<UserEntity>
 
     @Query("SELECT * FROM users where username = :username")
-    fun get(username:String):UserEntity?
+    fun get(username:String): UserEntity?
 
     @Query("SELECT username FROM users where id = :id")
     fun getUsername(id: Int): String?

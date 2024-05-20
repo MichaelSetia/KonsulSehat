@@ -1,4 +1,4 @@
-package com.example.konsulsehat
+package com.example.konsulsehat.database
 
 import androidx.room.Dao
 import androidx.room.Insert

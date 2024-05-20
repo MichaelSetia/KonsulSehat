@@ -1,4 +1,4 @@
-package com.example.konsulsehat
+package com.example.konsulsehat.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
