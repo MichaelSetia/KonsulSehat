@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+    android:orientation="vertical"
+    android:padding="50dp"
+    tools:context=".loginRegister.LoginActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Sign In"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/rounded_alternate_email_24" />
+
+        <EditText
+            android:id="@+id/txtEmail_Login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/icon_password" />
+
+        <EditText
+            android:id="@+id/txtPassword_Login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="Password"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSignIn_Login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Sign In"
+        app:cornerRadius="8dp" />
+
+    <Button
+        android:id="@+id/btnSignInWithGoogle"
+        style="@style/Widget.Material3.Button.IconButton.Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign In With Google"
+        app:cornerRadius="8dp"
+        app:icon="@drawable/icon_google" />
+
+    <Button
+        android:id="@+id/btnToRegister_Login"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:backgroundTint="#00FFFFFF"
+        android:includeFontPadding="false"
+        android:text="Don't have an account yet?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#358080" />
+</LinearLayout>

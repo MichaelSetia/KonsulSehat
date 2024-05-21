@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 
+@Dao
 interface DTransDao {
     @Dao
     interface DTransDao {
