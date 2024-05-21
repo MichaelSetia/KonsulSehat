@@ -1,8 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.KonsulSehat" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.KonsulSehat" parent="Theme.Material3.Light">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+         <item name="colorPrimary">@color/blue_primary</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="Theme.NoActionBar" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+         <item name="colorPrimary">@color/blue_primary</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:fontFamily">@font/poppins</item>
     </style>
 
     <style name="Theme.KonsulSehat" parent="Base.Theme.KonsulSehat" />

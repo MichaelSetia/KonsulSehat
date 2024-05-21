@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">KonsulSehat</string>
+    <string name="app_name">TalkSpace</string>
+    <string name="default_web_client_id">632582256226-pmglq3eqj33o1ne02og5bs6co63gcm65.apps.googleusercontent.com</string>
+
+
+    <string name="title_activity_patient_home">PatientHomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
