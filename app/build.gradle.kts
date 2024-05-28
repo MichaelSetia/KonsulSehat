@@ -46,6 +46,8 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation ("me.relex:circleindicator:2.1.6")
 
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("androidx.fragment:fragment:1.5.7")
 
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
