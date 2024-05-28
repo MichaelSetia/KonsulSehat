@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.example.konsulsehat.FragmentActivity
 import com.example.konsulsehat.PatientHomeActivity
 import com.example.konsulsehat.R
 import com.example.konsulsehat.databinding.ActivityChooseRoleBinding
@@ -104,7 +105,7 @@ class ChooseRoleActivity : AppCompatActivity() {
         val ref = cloudDB.collection("users").document(currentUser.uid)
         ref.get().addOnSuccessListener {
             if (it.data?.get("role")?.toString() == "Patient"){
-                startActivity(Intent(this, PatientHomeActivity::class.java))
+                startActivity(Intent(this, FragmentActivity::class.java))
             }
             else if (it.data?.get("role")?.toString() == "Psychiatrist"){
 //                startActivity(Intent(this, PsychiatristHomeActivity::class.java))

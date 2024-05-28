@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.konsulsehat.FragmentActivity
 import com.example.konsulsehat.PatientHomeActivity
 import com.example.konsulsehat.R
 import com.example.konsulsehat.databinding.ActivityLoginBinding
@@ -49,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()){
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful){
-                        val intent = Intent(this, PatientHomeActivity::class.java)
+                        val intent = Intent(this, FragmentActivity::class.java)
                         startActivity(intent)
                     }
                     else{
