@@ -4,15 +4,15 @@
 
     <item
         android:id="@+id/home_menu"
-        android:icon="@drawable/rounded_alternate_email_24"
+        android:icon="@drawable/asset_home_icon"
         android:title="Home" />
     <item
         android:id="@+id/search_menu"
-        android:icon="@drawable/icon_password"
+        android:icon="@drawable/asset_search_icon"
         android:title="Search" />
     <item
         android:id="@+id/chat_menu"
-        android:icon="@drawable/rounded_alternate_email_24"
+        android:icon="@drawable/asset_chat_icon"
         android:title="Chat" />
     <item
         android:id="@+id/profile_menu"
