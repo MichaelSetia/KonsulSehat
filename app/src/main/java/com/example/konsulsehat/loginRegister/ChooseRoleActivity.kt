@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.konsulsehat.FragmentActivity
-import com.example.konsulsehat.PatientHomeActivity
+//import com.example.konsulsehat.PatientHomeActivity
 import com.example.konsulsehat.R
 import com.example.konsulsehat.databinding.ActivityChooseRoleBinding
 import com.example.konsulsehat.databinding.ActivityRegisterBinding

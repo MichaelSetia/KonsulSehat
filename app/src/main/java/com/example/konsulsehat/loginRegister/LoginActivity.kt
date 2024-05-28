@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.konsulsehat.FragmentActivity
-import com.example.konsulsehat.PatientHomeActivity
+//import com.example.konsulsehat.PatientHomeActivity
 import com.example.konsulsehat.R
 import com.example.konsulsehat.databinding.ActivityLoginBinding
 import com.example.konsulsehat.databinding.ActivityRegisterBinding
