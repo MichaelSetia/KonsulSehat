@@ -15,7 +15,6 @@
             android:layout_width="200dp"
             android:layout_height="79dp"
             android:layout_weight="1"
-            android:src="@tools:sample/avatars"
             tools:srcCompat="@drawable/icon_profile" />
 
         <LinearLayout
