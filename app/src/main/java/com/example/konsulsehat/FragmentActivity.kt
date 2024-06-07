@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.konsulsehat.databinding.ActivityFragmentBinding
+import com.google.android.material.navigation.NavigationBarView
 
 
 class FragmentActivity : AppCompatActivity() {
@@ -14,32 +15,41 @@ class FragmentActivity : AppCompatActivity() {
         binding = ActivityFragmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
+        // Load the default fragment on startup
+        if (savedInstanceState == null) {
+            loadFragment(HomeFragment())
+        }
+
+        binding.bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home_menu -> {
                     loadFragment(HomeFragment())
                     true
                 }
-                R.id.search_menu-> {
+                R.id.search_menu -> {
                     loadFragment(SearchFragment())
                     true
                 }
-                R.id.chat_menu-> {
+                R.id.chat_menu -> {
                     loadFragment(ChatFragment())
                     true
                 }
-                R.id.profile_menu-> {
+                R.id.profile_menu -> {
                     loadFragment(ProfileFragment())
                     true
                 }
                 else -> false
-
             }
-        }
+        })
+
+        // Set default selected item
+        binding.bottomNavigation.selectedItemId = R.id.home_menu
     }
+
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
+        transaction.replace(R.id.fragmentContainerView2, fragment)
         transaction.commit()
     }
 }
+
