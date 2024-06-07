@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/imgSearchDokter"
-            android:layout_width="115dp"
-            android:layout_height="match_parent"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_weight="1"
             tools:srcCompat="@drawable/icon_profile" />
 
