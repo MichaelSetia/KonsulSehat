@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.firestore
 import java.util.Objects
+import androidx.lifecycle.ViewModelProvider
+import com.example.konsulsehat.SharedViewModel
 
 class ChooseRoleActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -26,6 +28,8 @@ class ChooseRoleActivity : AppCompatActivity() {
     private lateinit var userPassword:String
     private var cloudDB = Firebase.firestore
     lateinit var binding: ActivityChooseRoleBinding
+    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var loggedInUser : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChooseRoleBinding.inflate(layoutInflater)
@@ -105,7 +109,17 @@ class ChooseRoleActivity : AppCompatActivity() {
         val ref = cloudDB.collection("users").document(currentUser.uid)
         ref.get().addOnSuccessListener {
             if (it.data?.get("role")?.toString() == "Patient"){
-                startActivity(Intent(this, FragmentActivity::class.java))
+                sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
+                // Assume you get the logged-in user information after login
+                loggedInUser = it.data!!.get("email")!!.toString()
+                sharedViewModel.setLoggedInUser(loggedInUser)
+
+                // Example of passing the logged-in user information to one of the Fragments
+                val intent = Intent(this, FragmentActivity::class.java).apply {
+                    putExtra("loggedInUser", loggedInUser)
+                }
+                startActivity(intent)
             }
             else if (it.data?.get("role")?.toString() == "Psychiatrist"){
 //                startActivity(Intent(this, PsychiatristHomeActivity::class.java))

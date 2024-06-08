@@ -4,9 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.example.konsulsehat.FragmentActivity
 //import com.example.konsulsehat.PatientHomeActivity
 import com.example.konsulsehat.R
+import com.example.konsulsehat.SharedViewModel
 import com.example.konsulsehat.databinding.ActivityLoginBinding
 import com.example.konsulsehat.databinding.ActivityRegisterBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,7 +25,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth:FirebaseAuth
     private lateinit var googleSignInClient:GoogleSignInClient
     private var cloudDB = Firebase.firestore
-
+    private lateinit var loggedInUser : String
+    private lateinit var sharedViewModel: SharedViewModel
     companion object {
         private const val RC_SIGN_IN = 9001
     }
@@ -50,7 +53,14 @@ class LoginActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()){
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful){
-                        val intent = Intent(this, FragmentActivity::class.java)
+                        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
+                        // Assume you get the logged-in user information after login
+                        loggedInUser = email
+                        sharedViewModel.setLoggedInUser(loggedInUser)
+                        val intent = Intent(this, FragmentActivity::class.java).apply {
+                            putExtra("loggedInUser", loggedInUser)
+                        }
                         startActivity(intent)
                     }
                     else{
