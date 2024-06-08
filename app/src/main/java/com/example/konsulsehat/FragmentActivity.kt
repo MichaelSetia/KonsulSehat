@@ -4,16 +4,27 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import com.example.konsulsehat.databinding.ActivityFragmentBinding
 import com.google.android.material.navigation.NavigationBarView
 
 
 class FragmentActivity : AppCompatActivity() {
     lateinit var binding: ActivityFragmentBinding
+    private lateinit var sharedViewModel: SharedViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFragmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
+        // Retrieve the logged-in user information passed via Intent
+        val loggedInUser = intent.getStringExtra("loggedInUser")
+        sharedViewModel.setLoggedInUser(loggedInUser ?: "")
+
+        // Load the initial fragment
+        loadFragment(ChatFragment())
 
         // Load the default fragment on startup
         if (savedInstanceState == null) {
@@ -51,5 +62,6 @@ class FragmentActivity : AppCompatActivity() {
         transaction.replace(R.id.fragmentContainerView2, fragment)
         transaction.commit()
     }
+
 }
 
