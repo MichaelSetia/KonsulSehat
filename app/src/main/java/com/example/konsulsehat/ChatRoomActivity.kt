@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class ChatRoomActivity : AppCompatActivity() {
     var chatList = mutableListOf<Map<String, Any>>()
@@ -27,6 +29,7 @@ class ChatRoomActivity : AppCompatActivity() {
     private lateinit var roomChatId : String
     private lateinit var inpIsiChat: EditText
     private lateinit var btnSendChat: ImageButton
+    private lateinit var btnBackToChat : ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,15 +39,20 @@ class ChatRoomActivity : AppCompatActivity() {
         btnSendChat = findViewById(R.id.btnSendChat)
         tvUsernameChat = findViewById(R.id.tvUsernameChat)
         rvRoomChat = findViewById(R.id.rvRoomChat)
-
+        btnBackToChat= findViewById(R.id.btnBackToChat)
         userLoggedIn = ""
 
-        rvRoomChat.layoutManager = LinearLayoutManager(this)
+
+        rvRoomChat.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
 
         getData()
 
         btnSendChat.setOnClickListener {
             sendMessage()
+        }
+
+        btnBackToChat.setOnClickListener {
+            finish()
         }
     }
 
@@ -61,8 +69,8 @@ class ChatRoomActivity : AppCompatActivity() {
         var doctorName : String = ""
         val db = FirebaseFirestore.getInstance()
         db.collection("chats")
-            .whereEqualTo("fk_roomchat".toString(), roomChatId)
-//            .orderBy("timestamp")
+            .whereEqualTo("fk_roomchat", roomChatId)
+//            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 chatList.clear()

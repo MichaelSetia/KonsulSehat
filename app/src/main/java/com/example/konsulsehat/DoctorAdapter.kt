@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.auth.User
 
 class DoctorAdapter (
@@ -37,8 +38,13 @@ class DoctorAdapter (
         val th= userList[position]
 //        holder.tvImg.text="Owner by : ${th.owner.username}"
         holder.tvNama.text=th["name"].toString()
-        holder.tvRating.text=""
-//        holder.tvImg.setImageResource(th["profile_pict"]as Int)
+        holder.tvRating.text="0"
+        val profilePictUrl = th["profile_pict"] as? String
+        profilePictUrl?.let {
+            Glide.with(holder.tvImg.context)
+                .load(it)
+                .into(holder.tvImg)
+        }
 
     }
     fun updateList(newList: List<Map<String, Any>>) {
