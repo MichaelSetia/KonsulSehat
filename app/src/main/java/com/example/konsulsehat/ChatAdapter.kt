@@ -52,15 +52,28 @@ class ChatAdapter(
 //                .placeholder(R.drawable.icon_profile) // optional placeholder
 //                .error(R.drawable.icon_profile) // optional error image
 //                .into(holder.tvImg)
+            val profilePictUrl = data["profile_pict_user_2"] as? String
+            profilePictUrl?.let {
+                Glide.with(holder.tvImg.context)
+                    .load(it)
+                    .into(holder.tvImg)
+            }
             holder.tvLastChat.text = data["last_chat"].toString()
         }else if (data["user_2"].toString() == userLoggedIn.toString()) {
             holder.tvNama.text = data["user_1_name"].toString()
-            val profileUrl = data["profile_pict_user_1"].toString()
+//            val profileUrl = data["profile_pict_user_1"].toString()
 //            Glide.with(ChatFragment())
 //                .load(profileUrl)
 //                .placeholder(R.drawable.icon_profile) // optional placeholder
 //                .error(R.drawable.icon_profile) // optional error image
 //                .into(holder.tvImg)
+
+            val profilePictUrl = data["profile_pict_user_1"] as? String
+            profilePictUrl?.let {
+                Glide.with(holder.tvImg.context)
+                    .load(it)
+                    .into(holder.tvImg)
+            }
             holder.tvLastChat.text = data["last_chat"].toString()
         }
 

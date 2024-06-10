@@ -51,8 +51,6 @@ class SearchFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.w("FirestoreData", "Error getting documents: ", exception)
             }
-
-        return view
         tvSeatch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 // Nothing needed here
@@ -66,8 +64,10 @@ class SearchFragment : Fragment() {
                 val query = s.toString().trim()
                 searchDoctorByName(query)
             }
+        })
+        return view
+
         }
-        )}
 
 
     private fun searchDoctorByName(query: String) {

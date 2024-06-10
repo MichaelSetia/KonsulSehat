@@ -10,7 +10,7 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="651dp">
+        android:layout_height="664dp">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView2"
