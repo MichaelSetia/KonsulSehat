@@ -37,11 +37,12 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRoomChat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
         android:layout_above="@id/bottom_layout"
-        android:id="@+id/rvRoomChat"/>
+        android:layout_below="@id/toolbar"
+        android:padding="15dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

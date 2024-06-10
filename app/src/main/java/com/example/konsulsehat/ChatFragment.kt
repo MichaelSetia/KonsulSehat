@@ -1,5 +1,6 @@
 package com.example.konsulsehat
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,10 +12,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.konsulsehat.loginRegister.LoginActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 
-class ChatFragment : Fragment() {
+class ChatFragment : Fragment(), ChatAdapter.ClickListener {
     var chatList = mutableListOf<Map<String, Any>>()
     lateinit var recyclerView: RecyclerView
     lateinit var chatAdapter: ChatAdapter
@@ -48,29 +51,23 @@ class ChatFragment : Fragment() {
 
     private fun fetchChatDataFromFirestore() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("chats")
+        db.collection("room_chat")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val chatData = document.data
-                    val sender = chatData["sender"] as? String
-                    val receiver = chatData["receiver"] as? String
+                    val documentId = document.id
+                    chatData["documentId"] = documentId
+                    val user_1 = chatData["user_1"] as? String
+                    val user_2 = chatData["user_2"] as? String
 
-                    if (sender == userLoggedIn) {
-                        if (!uniqueChatIds.contains(receiver)) {
-                            // Jika tidak, tambahkan pesan ke HashSet dan list
-                            uniqueChatIds.add(receiver!!)
-                            chatList.add(chatData)
-                        }
-                    }else if (receiver == userLoggedIn) {
-                        if (!uniqueChatIds.contains(sender)) {
-                            // Jika tidak, tambahkan pesan ke HashSet dan list
-                            uniqueChatIds.add(sender!!)
-                            chatList.add(chatData)
-                        }
+                    if (user_1 == userLoggedIn) {
+                        chatList.add(chatData)
+                    }else if (user_2 == userLoggedIn) {
+                         chatList.add(chatData)
                     }
                 }
-                chatAdapter = ChatAdapter(chatList, userLoggedIn)
+                chatAdapter = ChatAdapter(chatList, userLoggedIn, this)
                 recyclerView.adapter = chatAdapter
             }
             .addOnFailureListener { exception ->
@@ -82,4 +79,9 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
+
+    override fun clickedItem(roomId: String) {
+        startActivity(Intent(context, ChatRoomActivity::class.java).putExtra("roomId", roomId).putExtra("userLoggedIn", userLoggedIn))
+    }
+
 }
