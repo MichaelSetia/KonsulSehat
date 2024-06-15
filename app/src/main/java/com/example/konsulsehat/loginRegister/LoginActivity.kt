@@ -3,6 +3,7 @@ package com.example.konsulsehat.loginRegister
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.konsulsehat.FragmentActivity
@@ -10,7 +11,7 @@ import com.example.konsulsehat.FragmentActivity
 import com.example.konsulsehat.R
 import com.example.konsulsehat.SharedViewModel
 import com.example.konsulsehat.databinding.ActivityLoginBinding
-import com.example.konsulsehat.databinding.ActivityRegisterBinding
+import com.example.konsulsehat.dokter.FragmentDokterActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -18,6 +19,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
 class LoginActivity : AppCompatActivity() {
@@ -50,26 +52,65 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.txtEmailLogin.text.toString()
             val password = binding.txtPasswordLogin.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty()){
+            if (email.isNotEmpty() && password.isNotEmpty()) {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful){
                         sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+                        // Debug log
+                        Log.d("SignInActivity", "Sign-in successful for email: $email")
 
-                        // Assume you get the logged-in user information after login
-                        loggedInUser = email
-                        sharedViewModel.setLoggedInUser(loggedInUser)
-                        val intent = Intent(this, FragmentActivity::class.java).apply {
-                            putExtra("loggedInUser", loggedInUser)
-                        }
-                        startActivity(intent)
-                    }
-                    else{
-                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_LONG).show()
+                        // Retrieve the user's role from the database using email
+                        val db = FirebaseFirestore.getInstance()
+
+                        // Query the collection to find the document with the specified email
+                        db.collection("users").whereEqualTo("email", email).get()
+                            .addOnSuccessListener { documents ->
+                                if (!documents.isEmpty) {
+                                    val document = documents.documents[0]
+                                    val role = document.getString("role")
+                                    sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
+                                    // Set the logged-in user
+                                    loggedInUser = email
+                                    sharedViewModel.setLoggedInUser(loggedInUser)
+
+                                    // Check the role and navigate accordingly
+                                    when (role) {
+                                        "Patient" -> {
+                                            val intent = Intent(this, FragmentActivity::class.java).apply {
+                                                putExtra("loggedInUser", loggedInUser)
+                                            }
+                                            startActivity(intent)
+                                        }
+                                        "Psychiatrist" -> {
+                                            val intent = Intent(this, FragmentDokterActivity::class.java).apply {
+                                                putExtra("loggedInUser", loggedInUser)
+                                            }
+                                            startActivity(intent)
+                                        }
+                                        else -> {
+                                            Log.d("SignInActivity", "Role not recognized for email: $email")
+                                            Toast.makeText(this, "Role not recognized!", Toast.LENGTH_LONG).show()
+                                        }
+                                    }
+                                } else {
+                                    // Debug log
+                                    Log.d("SignInActivity", "No document found for email: $email")
+                                    Toast.makeText(this, "No such document!", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                // Debug log
+                                Log.e("SignInActivity", "Failed to fetch role", exception)
+                                Toast.makeText(this, "Failed to fetch role: ${exception.message}", Toast.LENGTH_LONG).show()
+                            }
+                    } else {
+                        // Debug log
+                        Log.e("SignInActivity", "Sign-in failed", it.exception)
+                        Toast.makeText(this, "gabisa", Toast.LENGTH_LONG).show()
                     }
                 }
-
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Empty Fields are not allowed!", Toast.LENGTH_LONG).show()
             }
         }

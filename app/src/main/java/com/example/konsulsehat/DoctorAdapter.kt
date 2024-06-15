@@ -36,7 +36,7 @@ class DoctorAdapter (
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val th= userList[position]
-//        holder.tvImg.text="Owner by : ${th.owner.username}"
+////        holder.tvImg.text="Owner by : ${th.owner.username}"
         holder.tvNama.text=th["name"].toString()
         holder.tvRating.text="0"
         val profilePictUrl = th["profile_pict"] as? String
