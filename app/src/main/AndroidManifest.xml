@@ -13,6 +13,9 @@
         android:theme="@style/Theme.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".dokter.ChatRoomDokterActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChatRoomActivity"
             android:exported="false" />
         <activity

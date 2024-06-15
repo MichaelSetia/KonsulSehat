@@ -5,39 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:padding="15dp"
     tools:context=".dokter.FragmentDetail">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="99dp"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView11"
-            android:layout_width="305dp"
-            android:layout_height="49dp"
+            android:id="@+id/imgPasienAppointment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             tools:src="@tools:sample/avatars" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtNama"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/txtNamaPasienAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Nama Pasien"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txtUmurPasien"
-                android:layout_width="wrap_content"
+                android:id="@+id/txtUmurPasienAppointment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Umur Pasien" />
         </LinearLayout>
 
     </LinearLayout>
@@ -45,29 +49,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnComplete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Mark as Completed" />
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel Appointment" />
-
-        <Button
-            android:id="@+id/btnReschedule"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnRescheduleAppointment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Reschedule Appointment" />
+
+        <Button
+            android:id="@+id/btnCompleteAppointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#4CAF50"
+            android:text="Mark as Completed" />
+
+        <Button
+            android:id="@+id/btnCancelAppointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FF0000"
+            android:text="Cancel Appointment" />
+
     </LinearLayout>
 
     <TextView
