@@ -17,7 +17,7 @@ class BookingFragment : Fragment() {
     private lateinit var gelarDok: TextView
     private lateinit var deskDok: TextView
     private lateinit var rateDok: TextView
-
+    private lateinit var btnCancel:TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,13 +31,14 @@ class BookingFragment : Fragment() {
         gelarDok = view.findViewById(R.id.tvBookingGelar)
         deskDok = view.findViewById(R.id.tvBookingDeskripsi)
         rateDok = view.findViewById(R.id.tvBookingStar)
+        btnCancel = view.findViewById(R.id.btnBookingCancel)
 
+        btnCancel.setOnClickListener{
+            requireActivity().onBackPressed()
+        }
         val email = arguments?.getString("email")
-
-        // Initialize Firestore instance
         val db = FirebaseFirestore.getInstance()
 
-        // Query Firestore for user data with matching email
         db.collection("users")
             .whereEqualTo("email", email)
             .get()
@@ -50,7 +51,6 @@ class BookingFragment : Fragment() {
                     val rating = document.getDouble("rating")
                     val profilePictUrl = document.getString("profile_pict")
 
-                    // Set data to views
                     namaDok.text = nama
                     gelarDok.text = "Dr"
                     deskDok.text = deskripsi
