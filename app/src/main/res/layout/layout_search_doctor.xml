@@ -13,13 +13,13 @@
 
         <ImageView
             android:id="@+id/imgSearchDokter"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="128dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             tools:srcCompat="@drawable/icon_profile" />
 
         <LinearLayout
-            android:layout_width="283dp"
+            android:layout_width="346dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
@@ -53,7 +53,7 @@
 
                 <Button
                     android:id="@+id/btnDetailDokter"
-                    android:layout_width="wrap_content"
+                    android:layout_width="107dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Detail" />

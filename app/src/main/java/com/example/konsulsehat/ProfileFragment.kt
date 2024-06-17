@@ -72,15 +72,12 @@ class ProfileFragment : Fragment() {
         })
 
         btnSave.setOnClickListener {
-            // Update user data in Firestore
             val updatedName = tvFullName.text.toString().trim()
             val updatedEmail = tvEmail.text.toString().trim()
             val updatedPhoneNum = tvPhoneNum.text.toString().trim()
             val updatedBirthdate = tvBirthdate.text.toString().trim()
 
-            // Validate if all fields are filled
             if (updatedName.isNotEmpty() && updatedEmail.isNotEmpty() && updatedPhoneNum.isNotEmpty() && updatedBirthdate.isNotEmpty()) {
-                // Update Firestore document
                 val db = FirebaseFirestore.getInstance()
                 db.collection("users")
                     .whereEqualTo("email", userLoggedIn)
