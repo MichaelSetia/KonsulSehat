@@ -1,59 +1,74 @@
 package com.example.konsulsehat
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [BookingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BookingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var imgDok: ImageView
+    private lateinit var namaDok: TextView
+    private lateinit var gelarDok: TextView
+    private lateinit var deskDok: TextView
+    private lateinit var rateDok: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_booking, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_booking, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BookingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BookingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        // Initialize views
+        imgDok = view.findViewById(R.id.imageView10)
+        namaDok = view.findViewById(R.id.tvBookingNama)
+        gelarDok = view.findViewById(R.id.tvBookingGelar)
+        deskDok = view.findViewById(R.id.tvBookingDeskripsi)
+        rateDok = view.findViewById(R.id.tvBookingStar)
+
+        val email = arguments?.getString("email")
+
+        // Initialize Firestore instance
+        val db = FirebaseFirestore.getInstance()
+
+        // Query Firestore for user data with matching email
+        db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    // Handle document data
+                    val nama = document.getString("name")
+                    val gelar = document.getString("gelar")
+                    val deskripsi = document.getString("deskripsi")
+                    val rating = document.getDouble("rating")
+                    val profilePictUrl = document.getString("profile_pict")
+
+                    // Set data to views
+                    namaDok.text = nama
+                    gelarDok.text = "Dr"
+                    deskDok.text = deskripsi
+                    rateDok.text = "5"
+
+                    // Load image using Glide
+                    profilePictUrl?.let {
+                        Glide.with(requireContext())
+                            .load(it)
+                            .into(imgDok)
+                    }
                 }
             }
+            .addOnFailureListener { exception ->
+                Log.w("FirestoreData", "Error getting documents: ", exception)
+            }
+
+
+        return view
     }
 }
