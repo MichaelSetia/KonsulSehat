@@ -7,13 +7,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.konsulsehat.ChatRoomAdapter
 import com.example.konsulsehat.DoctorAdapter
 import com.example.konsulsehat.R
 
 class AppointmentAdapter(
     var AppointmentList: List<Map<String, Any>>,
-    var userLoggedIn: String,
+//    var userLoggedIn: String,
 
     ): RecyclerView.Adapter<AppointmentAdapter.ViewHolder>() {
 
@@ -26,7 +27,7 @@ class AppointmentAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout = LayoutInflater.from(parent.context).inflate(
-            R.layout.layout_search_doctor, parent, false
+            R.layout.appointment_layout, parent, false
         )
 
         return AppointmentAdapter.ViewHolder(layout)
@@ -38,8 +39,16 @@ class AppointmentAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val th= AppointmentList[position]
-        holder.tvNama.text=th["name"].toString()
-        
+        holder.tvNama.text=th["Patient_name"].toString()
+        holder.tvUmur.text=th["Patient_age"].toString()
+        holder.tvJam.text="[6-18-2024 12:10] - [6-19-2024 12:10]"
+        val profilePictUrl = th["Patient_profile_pict"] as? String
+        profilePictUrl?.let {
+            Glide.with(holder.tvImgPasien.context)
+                .load(it)
+                .into(holder.tvImgPasien)
+        }
+
     }
 }
 

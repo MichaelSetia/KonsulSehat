@@ -8,14 +8,15 @@
     tools:context=".dokter.Appointment">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/BottomNavigationView1"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="64dp"
         app:menu="@menu/menu_appointment_dokter" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView3"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="644dp" />
+        android:layout_height="668dp" />
 
 </LinearLayout>
