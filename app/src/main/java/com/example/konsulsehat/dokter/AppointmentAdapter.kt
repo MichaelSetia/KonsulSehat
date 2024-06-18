@@ -27,7 +27,7 @@ class AppointmentAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout = LayoutInflater.from(parent.context).inflate(
-            R.layout.layout_search_doctor, parent, false
+            R.layout.appointment_layout, parent, false
         )
 
         return AppointmentAdapter.ViewHolder(layout)
@@ -41,6 +41,7 @@ class AppointmentAdapter(
         val th= AppointmentList[position]
         holder.tvNama.text=th["Patient_name"].toString()
         holder.tvUmur.text=th["Patient_age"].toString()
+        holder.tvJam.text="[6-18-2024 12:10] - [6-19-2024 12:10]"
         val profilePictUrl = th["Patient_profile_pict"] as? String
         profilePictUrl?.let {
             Glide.with(holder.tvImgPasien.context)

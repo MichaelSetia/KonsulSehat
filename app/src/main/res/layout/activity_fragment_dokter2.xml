@@ -11,7 +11,7 @@
         android:id="@+id/fragmentContainerView4"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="652dp"
+        android:layout_height="650dp"
         app:defaultNavHost="true"
         app:navGraph="@navigation/dokter_navigation" />
 
