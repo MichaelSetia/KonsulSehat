@@ -1,6 +1,8 @@
 package com.example.konsulsehat.Admin
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -54,5 +56,37 @@ class MasterUserFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.w("FirestoreData", "Error getting documents: ", exception)
             }
+
+        tvSearch.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    // Nothing needed here
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    // Nothing needed here
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val query = s.toString().trim()
+                    searchUserByEmail(query)
+                }
+            })
+
+
+
     }
+
+
+    private fun searchUserByEmail(query: String) {
+        val filteredList = userList.filter { userData ->
+            val name = userData["email"] as? String ?: ""
+            name.contains(query, ignoreCase = true)
+        }
+        userAdapter.updateList(filteredList)
+    }
+
+
+
+
+
 }
