@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.konsulsehat.Admin.AdminFragmentActivity
 import com.example.konsulsehat.FragmentActivity
 //import com.example.konsulsehat.PatientHomeActivity
 import com.example.konsulsehat.R
@@ -84,6 +85,12 @@ class LoginActivity : AppCompatActivity() {
                                         }
                                         "Psychiatrist" -> {
                                             val intent = Intent(this, FragmentDokterActivity::class.java).apply {
+                                                putExtra("loggedInUser", loggedInUser)
+                                            }
+                                            startActivity(intent)
+                                        }
+                                        "Admin" -> {
+                                            val intent = Intent(this, AdminFragmentActivity::class.java).apply {
                                                 putExtra("loggedInUser", loggedInUser)
                                             }
                                             startActivity(intent)
