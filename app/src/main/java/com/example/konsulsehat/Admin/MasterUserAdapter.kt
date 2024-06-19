@@ -56,4 +56,10 @@ class MasterUserAdapter(
     override fun getItemCount(): Int {
         return userList.size
     }
+
+    fun updateList(newList: List<Map<String, Any>>) {
+        userList = newList
+        notifyDataSetChanged()
+    }
+
 }
