@@ -5,13 +5,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.konsulsehat.ChatFragment
-import com.example.konsulsehat.HomeFragment
-import com.example.konsulsehat.ProfileFragment
 import com.example.konsulsehat.R
-import com.example.konsulsehat.SearchFragment
 import com.example.konsulsehat.SharedViewModel
 import com.example.konsulsehat.databinding.ActivityAdminFragmentBinding
-import com.example.konsulsehat.databinding.ActivityFragmentBinding
 import com.google.android.material.navigation.NavigationBarView
 
 class AdminFragmentActivity : AppCompatActivity() {
@@ -42,7 +38,7 @@ class AdminFragmentActivity : AppCompatActivity() {
                     true
                 }
                 R.id.btnMAppointment -> {
-                    loadFragment(MasterAppointmentFragment())
+                    loadFragment(MasterDoctorFragment())
                     true
                 }
                 R.id.btnMTransaksi -> {

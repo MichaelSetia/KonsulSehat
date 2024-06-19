@@ -6,30 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.konsulsehat.ChatAdapter
 import com.example.konsulsehat.R
-import com.example.konsulsehat.SharedViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 
-class MasterUserFragment : Fragment() {
+class MasterDoctorFragment : Fragment() {
     var userList = mutableListOf<Map<String, Any>>()
     lateinit var recyclerView: RecyclerView
-    lateinit var userAdapter: MasterUserAdapter
-    private lateinit var tvSearch: EditText
-
+    lateinit var doctorAdapter: MasterDoctorAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_master_user, container, false)
+        val view = inflater.inflate(R.layout.fragment_master_doctor, container, false)
 
-        tvSearch = view.findViewById(R.id.tvSearchPatientAdmin)
-
-        recyclerView = view.findViewById(R.id.rvMasterUser)
+        recyclerView = view.findViewById(R.id.rvMasterDoctor)
         recyclerView.layoutManager = LinearLayoutManager(context)
         fetchChatDataFromFirestore()
 
@@ -44,15 +37,16 @@ class MasterUserFragment : Fragment() {
                 for (document in result) {
                     val userData = document.data
                     val role = userData["role"] as? String
-                    if (role == "Patient" ) {
+                    if (role == "Psychiatrist" ) {
                         userList.add(userData)
                     }
                 }
-                userAdapter = MasterUserAdapter(userList,)
-                recyclerView.adapter = userAdapter
+                doctorAdapter = MasterDoctorAdapter(userList,)
+                recyclerView.adapter = doctorAdapter
             }
             .addOnFailureListener { exception ->
                 Log.w("FirestoreData", "Error getting documents: ", exception)
             }
     }
+
 }
