@@ -4,11 +4,14 @@
 
     <item
         android:id="@+id/btnMUser"
-        android:title="Master User" />
+        android:icon="@drawable/asset_admin_user"
+        android:title="Master Patient" />
     <item
         android:id="@+id/btnMAppointment"
-        android:title="Master Appointment" />
+        android:icon="@drawable/asset_doctor_admin_baru"
+        android:title="Master Doctor" />
     <item
         android:id="@+id/btnMTransaksi"
+        android:icon="@drawable/asset_admin_transaction"
         android:title="Master Transaksi" />
 </menu>

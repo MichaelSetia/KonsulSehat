@@ -3,13 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_navigation"
-    app:startDestination="@id/masterAppointmentFragment">
+    app:startDestination="@id/masterDoctorFragment">
 
-    <fragment
-        android:id="@+id/masterAppointmentFragment"
-        android:name="com.example.konsulsehat.Admin.MasterAppointmentFragment"
-        android:label="fragment_master_appointment"
-        tools:layout="@layout/fragment_master_appointment" />
     <fragment
         android:id="@+id/masterTransaksiFragment"
         android:name="com.example.konsulsehat.Admin.MasterTransaksiFragment"
@@ -21,12 +16,17 @@
         android:label="fragment_master_user"
         tools:layout="@layout/fragment_master_user" />
     <action
-        android:id="@+id/action_global_masterAppointmentFragment"
-        app:destination="@id/masterAppointmentFragment" />
-    <action
         android:id="@+id/action_global_masterTransaksiFragment"
         app:destination="@id/masterTransaksiFragment" />
     <action
         android:id="@+id/action_global_masterUserFragment"
         app:destination="@id/masterUserFragment" />
+    <fragment
+        android:id="@+id/masterDoctorFragment"
+        android:name="com.example.konsulsehat.Admin.MasterDoctorFragment"
+        android:label="fragment_master_appointment"
+        tools:layout="@layout/fragment_master_doctor" />
+    <action
+        android:id="@+id/action_global_masterDoctorFragment"
+        app:destination="@id/masterDoctorFragment" />
 </navigation>

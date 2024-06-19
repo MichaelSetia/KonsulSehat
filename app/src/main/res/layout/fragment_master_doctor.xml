@@ -5,26 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".Admin.MasterUserFragment">
+    tools:context=".Admin.MasterDoctorFragment">
 
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/tvMasterDoctor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Master Patient"
+        android:text="Master Doctor"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/tvSearchPatientAdmin"
+        android:id="@+id/tvSearchDoctorAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:drawableStart="@drawable/baseline_search_24"
         android:ems="10"
-        android:hint="Search Patient Email"
+        android:hint="Search Doctor Email"
         android:inputType="text" />
 
     <LinearLayout
@@ -34,7 +34,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView30"
+            android:id="@+id/tvProfileDoctorAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -43,16 +43,16 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/tvEmailDoctorAdmin"
             android:layout_width="176dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="Patient Email"
+            android:text="Doctor Email"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView27"
+            android:id="@+id/tvBtnDetailAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -63,7 +63,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMasterUser"
+        android:id="@+id/rvMasterDoctor"
         android:layout_width="match_parent"
         android:layout_height="420dp"
         android:layout_marginTop="15dp">
@@ -71,12 +71,12 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/tvTotalPatientAdmin"
+        android:id="@+id/tvTotalDoctorAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:text="Total Patient :"
+        android:text="Total Doctor :"
         android:textSize="16sp"
         android:textStyle="bold" />
 
