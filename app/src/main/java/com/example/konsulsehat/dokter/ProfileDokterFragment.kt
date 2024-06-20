@@ -36,6 +36,7 @@ class ProfileDokterFragment : Fragment() {
     private lateinit var tvDeskripsi: EditText
     private lateinit var tvTelpDokter: EditText
     private lateinit var tvUltahDokter: EditText
+    private lateinit var tvHarga: EditText
     private lateinit var tvFotoProfileDokter: ImageView
     private lateinit var btnSaveChangesDokter: Button
 
@@ -58,6 +59,7 @@ class ProfileDokterFragment : Fragment() {
         tvTelpDokter = rootView.findViewById(R.id.txtTelpDokter)
         tvUltahDokter = rootView.findViewById(R.id.txtUltahDokter)
         tvFotoProfileDokter = rootView.findViewById(imgProfileDokter1)
+        tvHarga = rootView.findViewById(R.id.txtHarga)
         btnSaveChangesDokter = rootView.findViewById(R.id.btnSaveChangesDokter)
 
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
@@ -76,6 +78,7 @@ class ProfileDokterFragment : Fragment() {
                         tvDeskripsi.setText(userData["deskripsi"] as? String ?: "")
                         tvTelpDokter.setText(userData["phoneNum"] as? String ?: "")
                         tvUltahDokter.setText(userData["birthdate"] as? String ?: "")
+                        tvHarga.setText(userData["price"] as? String ?: "")
 
                         val profilePictUrl = document.getString("profile_pict")
                         profilePictUrl?.let {
@@ -98,6 +101,8 @@ class ProfileDokterFragment : Fragment() {
             val updatedDeskripsi = tvDeskripsi.text.toString().trim()
             val updatedPhoneNum = tvTelpDokter.text.toString().trim()
             val updatedBirthdate = tvUltahDokter.text.toString().trim()
+            val updatedHarga = tvHarga.text.toString().trim()
+
 
             if (updatedName.isNotEmpty() && updatedEmail.isNotEmpty() && updatedPhoneNum.isNotEmpty() && updatedBirthdate.isNotEmpty()) {
                 val db = FirebaseFirestore.getInstance()
@@ -113,7 +118,9 @@ class ProfileDokterFragment : Fragment() {
                                 "email" to updatedEmail,
                                 "deskripsi" to updatedDeskripsi,
                                 "phoneNum" to updatedPhoneNum,
-                                "birthdate" to updatedBirthdate
+                                "birthdate" to updatedBirthdate,
+                                "price" to updatedHarga
+                                
                             ))
                                 .addOnSuccessListener {
                                     Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()

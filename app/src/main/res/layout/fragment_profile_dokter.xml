@@ -24,7 +24,7 @@
         <ImageView
             android:id="@+id/imgProfileDokter1"
             android:layout_width="match_parent"
-            android:layout_height="115dp"
+            android:layout_height="wrap_content"
             app:srcCompat="@drawable/icon_profile" />
 
         <TextView
@@ -127,6 +127,20 @@
 
         <EditText
             android:id="@+id/txtUltahDokter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/txtHarga"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
