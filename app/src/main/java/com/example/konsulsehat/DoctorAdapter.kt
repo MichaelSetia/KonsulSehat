@@ -25,7 +25,7 @@ class DoctorAdapter (
         val tvRating: TextView = row.findViewById(R.id.tvRatingDokterSearch)
         val tvImg: ImageView = row.findViewById(R.id.imgSearchDokter)
         val btnAppointment: Button=row.findViewById(R.id.btnMakeAppointment)
-        val btnDetail:Button=row.findViewById(R.id.btnDetailDokter)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
