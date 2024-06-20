@@ -71,9 +71,6 @@ class MasterUserFragment : Fragment() {
                     searchUserByEmail(query)
                 }
             })
-
-
-
     }
 
 
