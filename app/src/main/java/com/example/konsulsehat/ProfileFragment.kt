@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -37,7 +36,7 @@ class ProfileFragment : Fragment() {
         tvPhoneNum = rootView.findViewById(R.id.editTextPhone)
         tvBirthdate = rootView.findViewById(R.id.editTextDate)
         tvfotoprofile = rootView.findViewById(R.id.imgProfileAccount)
-        btnSave = rootView.findViewById(R.id.button4)
+        btnSave = rootView.findViewById(R.id.btnSaveChangesProfile)
 
 
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)

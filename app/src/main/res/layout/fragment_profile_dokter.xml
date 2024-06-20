@@ -32,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Full Name"
-            android:textSize="20sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtNamaDokter"
@@ -46,10 +47,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email"
-            android:textSize="20sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtEmailDokter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tvtitlerateprofile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rate"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtRate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -60,10 +77,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Deskripsi"
-            android:textSize="20sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtDeskripsi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tvtitleexpprofile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Experience"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtExperience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -74,7 +107,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Phone Number"
-            android:textSize="20sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtTelpDokter"
@@ -88,7 +122,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date of Birth"
-            android:textSize="20sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txtUltahDokter"
@@ -101,6 +136,7 @@
             android:id="@+id/btnSaveChangesDokter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue_primary"
             android:text="Save Changes" />
     </LinearLayout>
 </FrameLayout>
