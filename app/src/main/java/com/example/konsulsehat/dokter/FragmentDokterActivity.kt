@@ -45,8 +45,8 @@ class FragmentDokterActivity : AppCompatActivity() {
                     loadFragment(ListPatienFragment())
                     true
                 }
-                R.id.profile_menu -> {
-                    loadFragment(ProfileFragment())
+                R.id.btnProfile -> {
+                    loadFragment(ProfileDokterFragment())
                     true
                 }
                 else -> false
