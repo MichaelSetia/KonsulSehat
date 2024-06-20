@@ -14,7 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class BookingFragment : Fragment() {
     private lateinit var imgDok: ImageView
     private lateinit var namaDok: TextView
-    private lateinit var gelarDok: TextView
+    private lateinit var hargaDok: TextView
     private lateinit var deskDok: TextView
     private lateinit var rateDok: TextView
     private lateinit var btnCancel:TextView
@@ -28,7 +28,7 @@ class BookingFragment : Fragment() {
         // Initialize views
         imgDok = view.findViewById(R.id.imageView10)
         namaDok = view.findViewById(R.id.tvBookingNama)
-        gelarDok = view.findViewById(R.id.tvBookingGelar)
+        hargaDok = view.findViewById(R.id.tvBookingHarga)
         deskDok = view.findViewById(R.id.tvBookingDeskripsi)
         rateDok = view.findViewById(R.id.tvBookingStar)
         btnCancel = view.findViewById(R.id.btnBookingCancel)
@@ -48,13 +48,14 @@ class BookingFragment : Fragment() {
                     val nama = document.getString("name")
                     val gelar = document.getString("gelar")
                     val deskripsi = document.getString("deskripsi")
+                    val harga = document.getString("price")
                     val rating = document.getDouble("rating")
                     val profilePictUrl = document.getString("profile_pict")
 
                     namaDok.text = nama
-                    gelarDok.text = "Dr"
+                    hargaDok.text = harga
                     deskDok.text = deskripsi
-                    rateDok.text = "5"
+                    rateDok.text = "Rp " + rating.toString()
 
                     // Load image using Glide
                     profilePictUrl?.let {
