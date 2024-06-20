@@ -15,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.konsulsehat.R
 import com.example.konsulsehat.R.id.imgProfileDokter1
+import com.example.konsulsehat.R.id.tvBookingHarga
+import com.example.konsulsehat.R.id.txtHarga
 import com.example.konsulsehat.SharedViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -36,7 +38,7 @@ class ProfileDokterFragment : Fragment() {
     private lateinit var tvDeskripsi: EditText
     private lateinit var tvTelpDokter: EditText
     private lateinit var tvUltahDokter: EditText
-    private lateinit var tvHarga: EditText
+    private lateinit var tvHargaDokter: EditText
     private lateinit var tvFotoProfileDokter: ImageView
     private lateinit var btnSaveChangesDokter: Button
 
@@ -58,8 +60,8 @@ class ProfileDokterFragment : Fragment() {
         tvDeskripsi = rootView.findViewById(R.id.txtDeskripsi)
         tvTelpDokter = rootView.findViewById(R.id.txtTelpDokter)
         tvUltahDokter = rootView.findViewById(R.id.txtUltahDokter)
+        tvHargaDokter = rootView.findViewById(R.id.txtHarga)
         tvFotoProfileDokter = rootView.findViewById(imgProfileDokter1)
-        tvHarga = rootView.findViewById(R.id.txtHarga)
         btnSaveChangesDokter = rootView.findViewById(R.id.btnSaveChangesDokter)
 
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
@@ -78,7 +80,7 @@ class ProfileDokterFragment : Fragment() {
                         tvDeskripsi.setText(userData["deskripsi"] as? String ?: "")
                         tvTelpDokter.setText(userData["phoneNum"] as? String ?: "")
                         tvUltahDokter.setText(userData["birthdate"] as? String ?: "")
-                        tvHarga.setText(userData["price"] as? String ?: "")
+                        tvHargaDokter.setText(userData["price"] as? String ?: "")
 
                         val profilePictUrl = document.getString("profile_pict")
                         profilePictUrl?.let {
@@ -101,8 +103,7 @@ class ProfileDokterFragment : Fragment() {
             val updatedDeskripsi = tvDeskripsi.text.toString().trim()
             val updatedPhoneNum = tvTelpDokter.text.toString().trim()
             val updatedBirthdate = tvUltahDokter.text.toString().trim()
-            val updatedHarga = tvHarga.text.toString().trim()
-
+            val updateHarga = tvHargaDokter.text.toString().trim()
 
             if (updatedName.isNotEmpty() && updatedEmail.isNotEmpty() && updatedPhoneNum.isNotEmpty() && updatedBirthdate.isNotEmpty()) {
                 val db = FirebaseFirestore.getInstance()
@@ -119,8 +120,7 @@ class ProfileDokterFragment : Fragment() {
                                 "deskripsi" to updatedDeskripsi,
                                 "phoneNum" to updatedPhoneNum,
                                 "birthdate" to updatedBirthdate,
-                                "price" to updatedHarga
-                                
+                                "price" to updateHarga
                             ))
                                 .addOnSuccessListener {
                                     Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()
