@@ -175,7 +175,8 @@ class LoginActivity : AppCompatActivity() {
                         "email" to auth.currentUser!!.email,
                         "name" to auth.currentUser!!.displayName,
                         "password" to "-",
-                        "profile_pict" to auth.currentUser!!.photoUrl
+                        "profile_pict" to auth.currentUser!!.photoUrl,
+                        "status" to "active"
                     )
                     val userId = auth.currentUser!!.uid
                     cloudDB.collection("users").document(userId).set(user)
