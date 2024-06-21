@@ -74,31 +74,43 @@ class LoginActivity : AppCompatActivity() {
                                     // Set the logged-in user
                                     loggedInUser = email
                                     sharedViewModel.setLoggedInUser(loggedInUser)
+                                    val status = document.getString("status")
+                                    if (status == "active") {
+                                        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
-                                    // Check the role and navigate accordingly
-                                    when (role) {
-                                        "Patient" -> {
-                                            val intent = Intent(this, FragmentActivity::class.java).apply {
-                                                putExtra("loggedInUser", loggedInUser)
+                                        // Set the logged-in user
+                                        loggedInUser = email
+                                        sharedViewModel.setLoggedInUser(loggedInUser)
+
+                                        // Check the role and navigate accordingly
+                                        when (role) {
+                                            "Patient" -> {
+                                                val intent = Intent(this, FragmentActivity::class.java).apply {
+                                                    putExtra("loggedInUser", loggedInUser)
+                                                }
+                                                startActivity(intent)
                                             }
-                                            startActivity(intent)
-                                        }
-                                        "Psychiatrist" -> {
-                                            val intent = Intent(this, FragmentDokterActivity::class.java).apply {
-                                                putExtra("loggedInUser", loggedInUser)
+                                            "Psychiatrist" -> {
+                                                val intent = Intent(this, FragmentDokterActivity::class.java).apply {
+                                                    putExtra("loggedInUser", loggedInUser)
+                                                }
+                                                startActivity(intent)
                                             }
-                                            startActivity(intent)
-                                        }
-                                        "Admin" -> {
-                                            val intent = Intent(this, AdminFragmentActivity::class.java).apply {
-                                                putExtra("loggedInUser", loggedInUser)
+                                            "Admin" -> {
+                                                val intent = Intent(this, AdminFragmentActivity::class.java).apply {
+                                                    putExtra("loggedInUser", loggedInUser)
+                                                }
+                                                startActivity(intent)
                                             }
-                                            startActivity(intent)
+                                            else -> {
+                                                Log.d("SignInActivity", "Role not recognized for email: $email")
+                                                Toast.makeText(this, "Role not recognized!", Toast.LENGTH_LONG).show()
+                                            }
                                         }
-                                        else -> {
-                                            Log.d("SignInActivity", "Role not recognized for email: $email")
-                                            Toast.makeText(this, "Role not recognized!", Toast.LENGTH_LONG).show()
-                                        }
+                                    } else {
+                                        // Handle inactive status
+                                        Log.d("SignInActivity", "User account is inactive: $email")
+                                        Toast.makeText(this, "Your account is inactive. Please contact support.", Toast.LENGTH_LONG).show()
                                     }
                                 } else {
                                     // Debug log
@@ -114,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         // Debug log
                         Log.e("SignInActivity", "Sign-in failed", it.exception)
-                        Toast.makeText(this, "gabisa", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Wrong Email or Password ", Toast.LENGTH_LONG).show()
                     }
                 }
             } else {
