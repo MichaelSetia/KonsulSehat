@@ -1,5 +1,7 @@
 package com.example.konsulsehat.Admin
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +20,7 @@ import com.example.konsulsehat.R
 
 class MasterUserAdapter(
     var userList: List<Map<String, Any>>,
-
+    var context: Context?
     ): RecyclerView.Adapter<MasterUserAdapter.ViewHolder>()  {
 
     class ViewHolder(val row: View) : RecyclerView.ViewHolder(row) {
@@ -49,7 +51,11 @@ class MasterUserAdapter(
         holder.tvEmailUser.setText(email)
 
         holder.btnDetail.setOnClickListener {
-
+            val intent = Intent(context, DetailMasterDoctorActivity::class.java)
+            // Pass the email to the new activity
+            intent.putExtra("email", email)
+            // Start the new activity
+            context?.startActivity(intent)
         }
     }
 

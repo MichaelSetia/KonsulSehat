@@ -29,6 +29,7 @@ class MasterDoctorFragment : Fragment() {
         recyclerView = view.findViewById(R.id.rvMasterDoctor)
         recyclerView.layoutManager = LinearLayoutManager(context)
         fetchChatDataFromFirestore()
+        val context = requireActivity()
 
         return view
     }
@@ -45,7 +46,7 @@ class MasterDoctorFragment : Fragment() {
                         userList.add(userData)
                     }
                 }
-                doctorAdapter = MasterDoctorAdapter(userList,)
+                doctorAdapter = MasterDoctorAdapter(userList,context)
                 recyclerView.adapter = doctorAdapter
             }
             .addOnFailureListener { exception ->
