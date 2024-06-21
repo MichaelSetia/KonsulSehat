@@ -43,7 +43,7 @@ class ChatRoomActivity : AppCompatActivity() {
         userLoggedIn = ""
 
 
-        rvRoomChat.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
+        rvRoomChat.layoutManager = LinearLayoutManager(this)
 
         getData()
 
@@ -94,6 +94,7 @@ class ChatRoomActivity : AppCompatActivity() {
                     }
                 }
                 setDoctorName(doctorName)
+                chatList.sortBy { it["timestamp"] as Long }
                 chatRoomAdapter = ChatRoomAdapter(chatList, userLoggedIn)
                 rvRoomChat.adapter = chatRoomAdapter
             }
