@@ -34,7 +34,7 @@ class MasterUserFragment : Fragment() {
         recyclerView = view.findViewById(R.id.rvMasterUser)
         recyclerView.layoutManager = LinearLayoutManager(context)
         fetchChatDataFromFirestore()
-
+        val context = requireActivity()
         return view
     }
 
@@ -50,7 +50,7 @@ class MasterUserFragment : Fragment() {
                         userList.add(userData)
                     }
                 }
-                userAdapter = MasterUserAdapter(userList,)
+                userAdapter = MasterUserAdapter(userList,context)
                 recyclerView.adapter = userAdapter
             }
             .addOnFailureListener { exception ->
