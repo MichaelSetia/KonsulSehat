@@ -15,14 +15,15 @@
 
         <ImageView
             android:id="@+id/imageViewProfilePasien"
-            android:layout_width="91dp"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="120dp"
             android:layout_weight="1"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
             android:layout_width="165dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -30,7 +31,7 @@
                 android:id="@+id/txtNamaPasien"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="Nama Pasien"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -38,23 +39,25 @@
                 android:id="@+id/txtUmur"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="Umur"
                 android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/txtJam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="Jam"
                 android:textSize="15sp" />
-        </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/asset_chat_icon" />
+            <ImageButton
+                android:id="@+id/btnChatAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/blue_primary"
+                app:srcCompat="@drawable/asset_chat_appointment" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

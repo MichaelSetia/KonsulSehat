@@ -44,7 +44,7 @@ class ChatRoomDokterActivity : AppCompatActivity() {
         getData()
 
         btnSendChat.setOnClickListener {
-//            sendMessage()
+            sendMessage()
         }
 
         btnBackToChat.setOnClickListener {

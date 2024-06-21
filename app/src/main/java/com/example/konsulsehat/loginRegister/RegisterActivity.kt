@@ -64,7 +64,8 @@ class RegisterActivity : AppCompatActivity() {
                             val user = hashMapOf(
                                 "email" to email,
                                 "name" to name,
-                                "password" to password
+                                "password" to password,
+                                "status" to "active"
                             )
 
                             val userId = auth.currentUser!!.uid
@@ -138,7 +139,8 @@ class RegisterActivity : AppCompatActivity() {
                         "email" to auth.currentUser!!.email,
                         "name" to auth.currentUser!!.displayName,
                         "password" to "-",
-                        "profile_pict" to auth.currentUser!!.photoUrl
+                        "profile_pict" to auth.currentUser!!.photoUrl,
+                        "status" to "active"
                     )
                     val userId = auth.currentUser!!.uid
                     cloudDB.collection("users").document(userId).set(user)
