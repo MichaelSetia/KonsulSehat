@@ -43,7 +43,14 @@ class DetailMasterDoctorActivity : AppCompatActivity() {
                     binding.tvEmailDetailDoctor.setText(userData["email"] as? String)
                     binding.tvPhoneDetailDoctor.setText(userData["phoneNum"] as? String ?: "")
                     binding.tvDateDetailDoctor.setText(userData["birthdate"] as? String ?: "")
-
+                    if (userData["status"]=="active"){
+                        binding.btnUnbanDetailDoctor.isEnabled=false
+                        binding.btnBanDetailDoctor.isEnabled=true
+                    }
+                    else{
+                        binding.btnUnbanDetailDoctor.isEnabled=true
+                        binding.btnBanDetailDoctor.isEnabled=false
+                    }
                     val profilePictUrl = document.getString("profile_pict")
                     profilePictUrl?.let {
                         Glide.with(this)
@@ -58,5 +65,30 @@ class DetailMasterDoctorActivity : AppCompatActivity() {
                 Log.e("FirestoreData", "Error getting user data: ", exception)
             }
 
+        binding.btnBanDetailDoctor.setOnClickListener{
+//            updateUserStatus("non-active")
+        }
+
+        binding.btnUnbanDetailDoctor.setOnClickListener {
+//            updateUserStatus("active")
+        }
     }
+//    private fun updateUserStatus(status: String) {
+//        val db = FirebaseFirestore.getInstance()
+//        db.collection("users").document(userId)
+//            .update("status", status)
+//            .addOnSuccessListener {
+//                Toast.makeText(this, "User status updated to $status", Toast.LENGTH_SHORT).show()
+//                if (status == "active") {
+//                    binding.btnUnbanDetailDoctor.isEnabled = false
+//                    binding.btnBanDetailDoctor.isEnabled = true
+//                } else {
+//                    binding.btnUnbanDetailDoctor.isEnabled = true
+//                    binding.btnBanDetailDoctor.isEnabled = false
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Toast.makeText(this, "Error updating status: ${exception.message}", Toast.LENGTH_SHORT).show()
+//            }
+//    }
 }
