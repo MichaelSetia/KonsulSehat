@@ -51,7 +51,7 @@ class MasterUserAdapter(
         holder.tvEmailUser.setText(email)
 
         holder.btnDetail.setOnClickListener {
-            val intent = Intent(context, DetailMasterDoctorActivity::class.java)
+            val intent = Intent(context, DetailMasterPatientActivity::class.java)
             // Pass the email to the new activity
             intent.putExtra("email", email)
             // Start the new activity

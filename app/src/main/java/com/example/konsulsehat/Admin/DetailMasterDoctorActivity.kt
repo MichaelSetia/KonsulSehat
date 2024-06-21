@@ -43,6 +43,9 @@ class DetailMasterDoctorActivity : AppCompatActivity() {
                     binding.tvEmailDetailDoctor.setText(userData["email"] as? String)
                     binding.tvPhoneDetailDoctor.setText(userData["phoneNum"] as? String ?: "")
                     binding.tvDateDetailDoctor.setText(userData["birthdate"] as? String ?: "")
+                    binding.tvRateDetailDoctor.setText(userData["rate"] as? String ?: "")
+                    binding.tvDeskripsiDetailDoctor.setText(userData["deskripsi"] as? String ?: "")
+                    binding.tvExperienceDetailDoctor.setText(userData["experiance"] as? String ?: "")
                     if (userData["status"]=="active"){
                         binding.btnUnbanDetailDoctor.isEnabled=false
                         binding.btnBanDetailDoctor.isEnabled=true
