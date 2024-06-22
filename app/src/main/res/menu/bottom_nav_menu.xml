@@ -15,6 +15,12 @@
         android:icon="@drawable/asset_chat_icon"
         android:title="Chat" />
     <item
+        android:id="@+id/journal_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/asset_logo_journal"
+        android:title="Journal" />
+    <item
         android:id="@+id/profile_menu"
         android:icon="@drawable/icon_profile"
         android:title="Profile" />
