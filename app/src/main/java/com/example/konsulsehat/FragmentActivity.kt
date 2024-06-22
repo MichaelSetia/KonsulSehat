@@ -45,6 +45,10 @@ class FragmentActivity : AppCompatActivity() {
                     loadFragment(ChatFragment())
                     true
                 }
+                R.id.journal_menu -> {
+                    loadFragment(JournalFragment())
+                    true
+                }
                 R.id.profile_menu -> {
                     loadFragment(ProfileFragment())
                     true
