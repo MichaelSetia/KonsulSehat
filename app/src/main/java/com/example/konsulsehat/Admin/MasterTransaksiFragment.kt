@@ -5,9 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.recyclerview.widget.RecyclerView
 import com.example.konsulsehat.R
 
 class MasterTransaksiFragment : Fragment() {
+    var transaksiList = mutableListOf<Map<String, Any>>()
+    lateinit var recyclerView: RecyclerView
+    lateinit var transaksiAdapter: MasterTransaksiAdapter
+    private lateinit var tvSearch: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

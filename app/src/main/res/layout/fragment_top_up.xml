@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="70dp"
+    android:paddingVertical="25dp"
+    tools:context=".TopUpFragment">
+
+    <TextView
+        android:id="@+id/textView36"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:text="Top Up Saldo"
+        android:textAlignment="viewStart"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtTopUpAmount"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Top Up Amount"
+        android:inputType="number"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnConfirmTopUp"
+        android:layout_width="117dp"
+        android:layout_height="38dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/blue_primary"
+        android:includeFontPadding="false"
+        android:text="Confirm" />
+
+</LinearLayout>
