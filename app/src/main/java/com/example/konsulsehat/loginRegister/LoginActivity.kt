@@ -30,6 +30,9 @@ class LoginActivity : AppCompatActivity() {
     private var cloudDB = Firebase.firestore
     private lateinit var loggedInUser : String
     private lateinit var sharedViewModel: SharedViewModel
+    private var email: String = ""
+    val db = FirebaseFirestore.getInstance()
+
     companion object {
         private const val RC_SIGN_IN = 9001
     }
@@ -50,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnSignInLogin.setOnClickListener{
-            val email = binding.txtEmailLogin.text.toString()
+            email = binding.txtEmailLogin.text.toString()
             val password = binding.txtPasswordLogin.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
@@ -59,9 +62,6 @@ class LoginActivity : AppCompatActivity() {
                         sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
                         // Debug log
                         Log.d("SignInActivity", "Sign-in successful for email: $email")
-
-                        // Retrieve the user's role from the database using email
-                        val db = FirebaseFirestore.getInstance()
 
                         // Query the collection to find the document with the specified email
                         db.collection("users").whereEqualTo("email", email).get()
@@ -72,14 +72,14 @@ class LoginActivity : AppCompatActivity() {
                                     sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
                                     // Set the logged-in user
-                                    loggedInUser = email
-                                    sharedViewModel.setLoggedInUser(loggedInUser)
+//                                    loggedInUser = auth.currentUser!!.email!!
+//                                    sharedViewModel.setLoggedInUser(loggedInUser)
                                     val status = document.getString("status")
                                     if (status == "active") {
                                         sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
                                         // Set the logged-in user
-                                        loggedInUser = email
+                                        loggedInUser = auth.currentUser!!.email!!
                                         sharedViewModel.setLoggedInUser(loggedInUser)
 
                                         // Check the role and navigate accordingly
@@ -171,22 +171,75 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val user = hashMapOf(
-                        "email" to auth.currentUser!!.email,
-                        "name" to auth.currentUser!!.displayName,
-                        "password" to "-",
-                        "profile_pict" to auth.currentUser!!.photoUrl,
-                        "status" to "active"
-                    )
-                    val userId = auth.currentUser!!.uid
-                    cloudDB.collection("users").document(userId).set(user)
-                        .addOnSuccessListener {
-                            val intent = Intent(this, ChooseRoleActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                    db.collection("users").whereEqualTo("email", auth.currentUser!!.email).get()
+                        .addOnSuccessListener { documents ->
+                            if (!documents.isEmpty) {   // email is already registered
+                                val document = documents.documents[0]
+                                val role = document.getString("role")
+                                sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
+                                val status = document.getString("status")
+                                if (status == "active") {
+                                    sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
+                                    // Set the logged-in user
+                                    loggedInUser = auth.currentUser!!.email!!
+                                    sharedViewModel.setLoggedInUser(loggedInUser)
+
+                                    // Check the role and navigate accordingly
+                                    when (role) {
+                                        "Patient" -> {
+                                            val intent = Intent(this, FragmentActivity::class.java).apply {
+                                                putExtra("loggedInUser", loggedInUser)
+                                            }
+                                            startActivity(intent)
+                                        }
+                                        "Psychiatrist" -> {
+                                            val intent = Intent(this, FragmentDokterActivity::class.java).apply {
+                                                putExtra("loggedInUser", loggedInUser)
+                                            }
+                                            startActivity(intent)
+                                        }
+                                        "Admin" -> {
+                                            val intent = Intent(this, AdminFragmentActivity::class.java).apply {
+                                                putExtra("loggedInUser", loggedInUser)
+                                            }
+                                            startActivity(intent)
+                                        }
+                                        else -> {
+                                            Log.d("SignInActivity", "Role not recognized for email: $email")
+                                            Toast.makeText(this, "Role not recognized!", Toast.LENGTH_LONG).show()
+                                        }
+                                    }
+                                } else {
+                                    // Handle inactive status
+                                    Log.d("SignInActivity", "User account is inactive: $email")
+                                    Toast.makeText(this, "Your account is inactive. Please contact support.", Toast.LENGTH_LONG).show()
+                                }
+                            } else {
+                                val user = hashMapOf(
+                                    "email" to auth.currentUser!!.email,
+                                    "name" to auth.currentUser!!.displayName,
+                                    "password" to "-",
+                                    "profile_pict" to auth.currentUser!!.photoUrl,
+                                    "status" to "active"
+                                )
+                                val userId = auth.currentUser!!.uid
+                                cloudDB.collection("users").document(userId).set(user)
+                                    .addOnSuccessListener {
+                                        val intent = Intent(this, ChooseRoleActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
+                                    }
+                            }
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
+                        .addOnFailureListener { exception ->
+                            // Debug log
+                            Log.e("SignInActivity", "Failed to fetch role", exception)
+                            Toast.makeText(this, "Failed to fetch role: ${exception.message}", Toast.LENGTH_LONG).show()
                         }
                 } else {
                     Toast.makeText(this, "Authentication failed", Toast.LENGTH_LONG).show()

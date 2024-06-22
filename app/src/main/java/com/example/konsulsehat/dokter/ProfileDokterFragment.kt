@@ -1,5 +1,6 @@
 package com.example.konsulsehat.dokter
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,6 +19,11 @@ import com.example.konsulsehat.R.id.imgProfileDokter1
 import com.example.konsulsehat.R.id.tvBookingHarga
 import com.example.konsulsehat.R.id.txtHarga
 import com.example.konsulsehat.SharedViewModel
+import com.example.konsulsehat.loginRegister.LoginActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,6 +47,9 @@ class ProfileDokterFragment : Fragment() {
     private lateinit var tvHargaDokter: EditText
     private lateinit var tvFotoProfileDokter: ImageView
     private lateinit var btnSaveChangesDokter: Button
+    private lateinit var btnLogoutDokter: Button
+    private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +72,15 @@ class ProfileDokterFragment : Fragment() {
         tvHargaDokter = rootView.findViewById(R.id.txtHarga)
         tvFotoProfileDokter = rootView.findViewById(imgProfileDokter1)
         btnSaveChangesDokter = rootView.findViewById(R.id.btnSaveChangesDokter)
+        btnLogoutDokter = rootView.findViewById(R.id.btnLogoutDokter)
+        auth = FirebaseAuth.getInstance()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
 
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         sharedViewModel.loggedInUser.observe(viewLifecycleOwner, Observer { loggedInUser ->
@@ -96,6 +114,16 @@ class ProfileDokterFragment : Fragment() {
                     Log.e("FirestoreData", "Error getting user data: ", exception)
                 }
         })
+
+        btnLogoutDokter.setOnClickListener{
+            auth.signOut()
+            googleSignInClient.signOut().addOnCompleteListener(requireActivity()) {
+                // Optional: Update UI or show a message to the user
+                val intent = Intent(requireActivity(), LoginActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        }
 
         btnSaveChangesDokter.setOnClickListener {
             val updatedName = tvNamaDokter.text.toString().trim()

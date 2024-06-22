@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.konsulsehat.databinding.ActivityChooseRoleBinding
-import com.example.konsulsehat.databinding.ActivityPatientHomeBinding
+//import com.example.konsulsehat.databinding.ActivityPatientHomeBinding
 import com.example.konsulsehat.loginRegister.LoginActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

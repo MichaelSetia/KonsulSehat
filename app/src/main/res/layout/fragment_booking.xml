@@ -86,12 +86,14 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtPatientInfo"
             android:layout_width="match_parent"
-            android:layout_height="98dp"
 
+            android:layout_height="98dp"
             android:backgroundTint="#7A5AA7A7"
             android:foregroundTint="@color/blue_primary"
             android:hint="Type Here"
+            android:singleLine="false"
             android:textColor="@color/black"
             android:textColorHighlight="@color/black"
             android:textColorHint="@color/black"

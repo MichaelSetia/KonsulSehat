@@ -2,17 +2,23 @@ package com.example.konsulsehat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import com.example.konsulsehat.Admin.AdminFragmentActivity
 import com.example.konsulsehat.databinding.FragmentHomeBinding
+import com.example.konsulsehat.dokter.FragmentDokterActivity
 import com.example.konsulsehat.loginRegister.LoginActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -23,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private val cloudDB = Firebase.firestore
+    val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +59,29 @@ class HomeFragment : Fragment() {
 
     private fun displayUserName(currentUser: FirebaseUser?) {
         currentUser?.let {
-            val userName = it.displayName ?: "User"
+            var userName:String = ""
+            if (it.displayName?.isEmpty() == false){
+                userName = it.displayName!!
+            }
+            else {
+                db.collection("users").whereEqualTo("email", it.email).get()
+                    .addOnSuccessListener { documents ->
+                        val document = documents.documents[0]
+                        if (!documents.isEmpty) {
+                            userName = document.getString("name")!!
+                        } else {
+                            // Debug log
+                            Log.d("SignInActivity", "No document found for email: ${document.getString("email")!!}")
+                            Toast.makeText(requireContext(), "No such document!", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        // Debug log
+                        Log.e("SignInActivity", "Failed to fetch role", exception)
+                        Toast.makeText(requireContext(), "Failed to fetch role: ${exception.message}", Toast.LENGTH_LONG).show()
+                    }
+            }
+
             binding.tvUname.text = "$userName!"
         }
     }

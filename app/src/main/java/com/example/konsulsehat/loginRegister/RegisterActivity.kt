@@ -4,13 +4,19 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
+import com.example.konsulsehat.Admin.AdminFragmentActivity
+import com.example.konsulsehat.FragmentActivity
 import com.example.konsulsehat.R
+import com.example.konsulsehat.SharedViewModel
 import com.example.konsulsehat.databinding.ActivityLandingBinding
 import com.example.konsulsehat.databinding.ActivityRegisterBinding
+import com.example.konsulsehat.dokter.FragmentDokterActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -20,6 +26,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
 class RegisterActivity : AppCompatActivity() {
@@ -27,6 +34,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var googleSignInClient:GoogleSignInClient
     private var cloudDB = Firebase.firestore
     lateinit var binding: ActivityRegisterBinding
+    private val db = FirebaseFirestore.getInstance()
+    private lateinit var sharedViewModel: SharedViewModel
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -58,40 +67,55 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPassword = binding.txtConfirmPasswordRegister.text.toString()
 
             if (email.isNotEmpty() && name.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()){
-                if (password == confirmPassword){
-                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                        if (it.isSuccessful){
-                            val user = hashMapOf(
-                                "email" to email,
-                                "name" to name,
-                                "password" to password,
-                                "status" to "active"
-                            )
+                // Query the collection to find the document with the specified email
+                db.collection("users").whereEqualTo("email", email).get()
+                    .addOnSuccessListener { documents ->
+                        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+                        if (!documents.isEmpty) { // email is registered
+                            Log.d("RegisterActivity", "Email is already registered: $email")
+                            Toast.makeText(this, "Email is already registered", Toast.LENGTH_LONG).show()
+                        } else {
+                            if (password == confirmPassword){
+                                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                                    if (it.isSuccessful){
+                                        val user = hashMapOf(
+                                            "email" to email,
+                                            "name" to name,
+                                            "password" to password,
+                                            "status" to "active"
+                                        )
 
-                            val userId = auth.currentUser!!.uid
-                            cloudDB.collection("users").document(userId).set(user)
-                            .addOnSuccessListener {
-                                binding.txtEmailRegister.text.clear()
-                                binding.txtNameRegister.text.clear()
-                                binding.txtPasswordRegister.text.clear()
-                                binding.txtConfirmPasswordRegister.text.clear()
+                                        val userId = auth.currentUser!!.uid
+                                        cloudDB.collection("users").document(userId).set(user)
+                                            .addOnSuccessListener {
+                                                binding.txtEmailRegister.text.clear()
+                                                binding.txtNameRegister.text.clear()
+                                                binding.txtPasswordRegister.text.clear()
+                                                binding.txtConfirmPasswordRegister.text.clear()
 
-                                val intent = Intent(this, ChooseRoleActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                                                val intent = Intent(this, ChooseRoleActivity::class.java)
+                                                startActivity(intent)
+                                                finish()
+                                            }
+                                            .addOnFailureListener {
+                                                Toast.makeText(this, it.message , Toast.LENGTH_LONG).show()
+                                            }
+                                    }
+                                    else{
+                                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_LONG).show()
+                                    }
+                                }
                             }
-                            .addOnFailureListener {
-                                Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
+                            else{
+                                Toast.makeText(this, "Password and Confirm Password is not matching!", Toast.LENGTH_LONG).show()
                             }
-                        }
-                        else{
-                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_LONG).show()
                         }
                     }
-                }
-                else{
-                    Toast.makeText(this, "Password and Confirm Password is not matching!", Toast.LENGTH_LONG).show()
-                }
+                    .addOnFailureListener { exception ->
+                        // Debug log
+                        Log.e("SignInActivity", "Failed to fetch role", exception)
+                        Toast.makeText(this, "Failed to fetch role: ${exception.message}", Toast.LENGTH_LONG).show()
+                    }
             }
             else{
                 Toast.makeText(this, "Empty Fields are not allowed!", Toast.LENGTH_LONG).show()

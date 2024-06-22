@@ -37,4 +37,14 @@
     <action
         android:id="@+id/action_global_searchFragment"
         app:destination="@id/searchFragment" />
+    <fragment
+        android:id="@+id/bookingFragment"
+        android:name="com.example.konsulsehat.BookingFragment"
+        android:label="BookingFragment" />
+    <action android:id="@+id/action_global_bookingFragment" app:destination="@id/bookingFragment" />
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.konsulsehat.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" />
 </navigation>

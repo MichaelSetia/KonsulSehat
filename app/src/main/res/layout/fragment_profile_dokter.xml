@@ -123,5 +123,13 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue_primary"
             android:text="Save Changes" />
+
+        <Button
+            android:id="@+id/btnLogoutDokter"
+            style="@style/Widget.Material3.Button.IconButton.Outlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:textColor="@color/blue_primary" />
     </LinearLayout>
 </FrameLayout>
