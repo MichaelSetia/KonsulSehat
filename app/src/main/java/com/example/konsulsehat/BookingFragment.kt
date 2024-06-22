@@ -52,12 +52,6 @@ class BookingFragment : Fragment() {
     private lateinit var psychiatrist_email:String
     private var pricing:Double? = 0.0
 
-
-
-//    private var pricing : Int? = null
-//    private var dokter_id : String? = null
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,10 +90,14 @@ class BookingFragment : Fragment() {
                     val dokter_harga = document.getString("price")
                     val dokter_rating = document.getDouble("rating")
                     val dokter_profilePictUrl = document.getString("profile_pict")
-                    psychiatrist_email = document.getString("profile_pict")!!
+                    psychiatrist_email = document.getString("email")!!
 //                    dokter_id = document.id
-                    var tempPricing = document.get("price").toString() ?: null
-                    pricing = tempPricing?.toDouble() ?: 0.0
+                    if (document.getString("rate") != null){
+                        pricing = document.getString("rate")!!.toDouble()
+                    }
+                    else {
+                        pricing = 100000.toDouble()
+                    }
 
                     namaDok.text = dokter_nama
                     hargaDok.text = dokter_harga
@@ -150,6 +148,7 @@ class BookingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         btnPayment.setOnClickListener{
             val patient_info = patientInfo.text.toString()
             val date = dateKonseling.date
@@ -176,29 +175,31 @@ class BookingFragment : Fragment() {
             db.collection("appointment")
                 .add(appointment)
                 .addOnSuccessListener {
-
-//                    SdkUIFlowBuilder.init()
-//                        .setContext(requireContext())
-//                        .setClientKey("SB-Mid-client-g2JImFSrBtMatNET") // Set your client key
-//                        .enableLog(true)
-//                        .setTransactionFinishedCallback( TransactionFinishedCallback {result ->
-//                            when (result?.status) {
-//                                TransactionResult.STATUS_SUCCESS -> {
-//                                    // Payment success
-//                                }
-//                                TransactionResult.STATUS_PENDING -> {
-//                                    // Payment pending
-//                                }
-//                                TransactionResult.STATUS_FAILED -> {
-//                                    // Payment failed
-//                                }
-//                                TransactionResult.STATUS_INVALID -> {
-//                                    // Payment invalid
-//                                }
-//                            }
-//                        })
-//                        .setColorTheme(CustomColorTheme("#5AA7A7", "#244242", "#F6F7F7"))
-//                        .buildSDK()
+                    SdkUIFlowBuilder.init()
+                        .setContext(requireContext())
+                        .setClientKey("SB-Mid-client-g2JImFSrBtMatNET") // Set your client key
+                        .enableLog(true)
+                        .setTransactionFinishedCallback( TransactionFinishedCallback {result ->
+                            when (result?.status) {
+                                TransactionResult.STATUS_SUCCESS -> {
+                                    Toast.makeText(requireContext(), "Payment Success", Toast.LENGTH_LONG).show()
+                                }
+                                TransactionResult.STATUS_PENDING -> {
+                                    Toast.makeText(requireContext(), "Payment Pending", Toast.LENGTH_LONG).show()
+                                    // Payment pending
+                                }
+                                TransactionResult.STATUS_FAILED -> {
+                                    Toast.makeText(requireContext(), "Payment Failed", Toast.LENGTH_LONG).show()
+                                    // Payment failed
+                                }
+                                TransactionResult.STATUS_INVALID -> {
+                                    Toast.makeText(requireContext(), "Payment Status Invalid", Toast.LENGTH_LONG).show()
+                                    // Payment invalid
+                                }
+                            }
+                        })
+                        .setColorTheme(CustomColorTheme("#5AA7A7", "#244242", "#F6F7F7"))
+                        .buildSDK()
 
                     val clientKey = "SB-Mid-client-g2JImFSrBtMatNET"
                     val transactionRequest = TransactionRequest(
@@ -218,11 +219,6 @@ class BookingFragment : Fragment() {
 
                     MidtransSDK.getInstance().transactionRequest = transactionRequest
                     MidtransSDK.getInstance().startPaymentUiFlow(requireContext())
-
-
-//                    val intent = Intent(requireContext(), MidtransPaymentActivity::class.java)
-//                    intent.putExtra(EXTRA_TRANSACTION_REQUEST, transactionRequest)
-//                    startActivityForResult(intent, REQUEST_CODE_PAYMENT)
 
                 }
                 .addOnFailureListener {
