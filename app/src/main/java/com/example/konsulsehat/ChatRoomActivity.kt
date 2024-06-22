@@ -56,6 +56,28 @@ class ChatRoomActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkTimeLimitAndSetChatInputState(timeLimit: Long) {
+        val currentTime = System.currentTimeMillis()
+
+        if (currentTime <= timeLimit) {
+            enableChatInput()
+        } else {
+            disableChatInput()
+        }
+    }
+
+    private fun enableChatInput() {
+        inpIsiChat.isEnabled = true
+        inpIsiChat.hint = "Write message here"
+        btnSendChat.isEnabled = true
+    }
+
+    private fun disableChatInput() {
+        inpIsiChat.isEnabled = false
+        inpIsiChat.hint = "Chat is disabled, kindly re-book!"
+        btnSendChat.isEnabled = false
+    }
+
     private fun getData() {
         var intent = intent.extras
 
@@ -100,6 +122,20 @@ class ChatRoomActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Log.w("FirestoreData", "Error getting documents: ", exception)
+            }
+
+        db.collection("room_chat").document(roomChatId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val timeLimit = document.getLong("time_limit") ?: 0L
+                    checkTimeLimitAndSetChatInputState(timeLimit)
+                } else {
+                    Log.d("FirestoreData", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("FirestoreData", "Error getting document: ", exception)
             }
     }
 

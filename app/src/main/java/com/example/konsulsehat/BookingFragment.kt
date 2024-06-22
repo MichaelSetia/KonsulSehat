@@ -43,7 +43,7 @@ class BookingFragment : Fragment() {
     private lateinit var dateKonseling:CalendarView
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-
+    private lateinit var dokter_profilePictUrl:String
     private var patient_age: Int? = null
     private lateinit var patient_email:String
     private lateinit var patient_phone:String
@@ -89,7 +89,7 @@ class BookingFragment : Fragment() {
                     val dokter_deskripsi = document.getString("deskripsi")
                     val dokter_harga = document.getString("price")
                     val dokter_rating = document.getDouble("rating")
-                    val dokter_profilePictUrl = document.getString("profile_pict")
+                    dokter_profilePictUrl = document.getString("profile_pict")!!
                     psychiatrist_email = document.getString("email")!!
 //                    dokter_id = document.id
                     if (document.getString("rate") != null){
@@ -171,6 +171,65 @@ class BookingFragment : Fragment() {
             // 1 : belum bayar
             // 2 : sudah bayar, appointment blm berlangsung / blm konsul
             // 3 : sudah konsul
+
+
+            // ini dipindah ke codingan kalo sudah bayar
+            val db = FirebaseFirestore.getInstance()
+            db.collection("room_chat")
+                .get()
+                .addOnSuccessListener { result ->
+                    var chatExists = false
+                    var chatDocumentId: String? = null
+
+                    for (document in result) {
+                        val chatData = document.data
+                        val user_1 = chatData["user_1"] as? String
+                        val user_2 = chatData["user_2"] as? String
+
+                        if ((user_1 == psychiatrist_email && user_2 == patient_email) || (user_1 == patient_email && user_2 == psychiatrist_email)) {
+                            chatExists = true
+                            chatDocumentId = document.id
+                            break
+                        }
+                    }
+
+                    if (chatExists) {
+                        // Update the appointment time in the existing chat document
+                        chatDocumentId?.let {
+                            db.collection("room_chat").document(it)
+                                .update("time_limit", date)
+                                .addOnSuccessListener {
+                                    Log.d("FirestoreData", "Appointment time updated successfully")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w("FirestoreData", "Error updating appointment time", e)
+                                }
+                        }
+                    } else {
+                        // Add a new chat document
+                        val newChat = hashMapOf(
+                            "user_1" to psychiatrist_email,
+                            "user_1_name" to namaDok.text,
+                            "user_2" to patient_email,
+                            "user_2_name" to patient_name,
+                            "profile_pict_user_1" to imgDok,
+                            "profile_pict_user_2" to patient_profile_pict,
+                            "time_limit" to date
+                        )
+
+                        db.collection("room_chat")
+                            .add(newChat)
+                            .addOnSuccessListener {
+                                Log.d("FirestoreData", "New chat room created successfully")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("FirestoreData", "Error creating new chat room", e)
+                            }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("FirestoreData", "Error getting documents: ", exception)
+                }
 
             db.collection("appointment")
                 .add(appointment)
