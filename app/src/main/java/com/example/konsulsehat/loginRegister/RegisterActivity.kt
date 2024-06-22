@@ -82,6 +82,8 @@ class RegisterActivity : AppCompatActivity() {
                                             "email" to email,
                                             "name" to name,
                                             "password" to password,
+                                            "profile_pict" to "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png",
+                                            "saldo" to 0,
                                             "status" to "active"
                                         )
 
@@ -164,6 +166,7 @@ class RegisterActivity : AppCompatActivity() {
                         "name" to auth.currentUser!!.displayName,
                         "password" to "-",
                         "profile_pict" to auth.currentUser!!.photoUrl,
+                        "saldo" to 0,
                         "status" to "active"
                     )
                     val userId = auth.currentUser!!.uid

@@ -52,9 +52,9 @@ class HomeFragment : Fragment() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
-        binding.btnLogout.setOnClickListener {
-            signOutAndStartSignInActivity()
-        }
+//        binding.btnLogout.setOnClickListener {
+//            signOutAndStartSignInActivity()
+//        }
     }
 
     private fun displayUserName(currentUser: FirebaseUser?) {
@@ -85,15 +85,7 @@ class HomeFragment : Fragment() {
             binding.tvUname.text = "$userName!"
         }
     }
-    private fun signOutAndStartSignInActivity() {
-        auth.signOut()
-        googleSignInClient.signOut().addOnCompleteListener(requireActivity()) {
-            // Optional: Update UI or show a message to the user
-            val intent = Intent(requireActivity(), LoginActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
-        }
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

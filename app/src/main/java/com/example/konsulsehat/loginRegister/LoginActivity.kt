@@ -222,6 +222,7 @@ class LoginActivity : AppCompatActivity() {
                                     "name" to auth.currentUser!!.displayName,
                                     "password" to "-",
                                     "profile_pict" to auth.currentUser!!.photoUrl,
+                                    "saldo" to 0,
                                     "status" to "active"
                                 )
                                 val userId = auth.currentUser!!.uid
