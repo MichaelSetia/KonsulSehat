@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class ChatRoomActivity : AppCompatActivity() {
     var chatList = mutableListOf<Map<String, Any>>()
@@ -56,13 +60,39 @@ class ChatRoomActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkTimeLimitAndSetChatInputState(timeLimit: Long) {
-        val currentTime = System.currentTimeMillis()
+    private fun checkTimeLimitAndSetChatInputState(timeLimitDate: Date) {
+        val currentDate = Date()
 
-        if (currentTime <= timeLimit) {
+        // Clear time part of current date
+        val currentCalendar = Calendar.getInstance()
+        currentCalendar.time = currentDate
+        currentCalendar.set(Calendar.HOUR_OF_DAY, 0)
+        currentCalendar.clear(Calendar.MINUTE)
+        currentCalendar.clear(Calendar.SECOND)
+        currentCalendar.clear(Calendar.MILLISECOND)
+        val clearedCurrentDate = currentCalendar.time
+
+        // Clear time part of timeLimitDate
+        val timeLimitCalendar = Calendar.getInstance()
+        timeLimitCalendar.time = timeLimitDate
+        timeLimitCalendar.set(Calendar.HOUR_OF_DAY, 0)
+        timeLimitCalendar.clear(Calendar.MINUTE)
+        timeLimitCalendar.clear(Calendar.SECOND)
+        timeLimitCalendar.clear(Calendar.MILLISECOND)
+        val clearedTimeLimitDate = timeLimitCalendar.time
+
+        if (clearedCurrentDate == clearedTimeLimitDate) {
             enableChatInput()
         } else {
             disableChatInput()
+        }
+    }
+    fun parseDate(dateString: String, format: String = "dd/MM/yyyy"): Date? {
+        return try {
+            SimpleDateFormat(format, Locale.getDefault()).parse(dateString)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -74,7 +104,7 @@ class ChatRoomActivity : AppCompatActivity() {
 
     private fun disableChatInput() {
         inpIsiChat.isEnabled = false
-        inpIsiChat.hint = "Chat is disabled, kindly re-book!"
+        inpIsiChat.hint = "Chat is disabled!"
         btnSendChat.isEnabled = false
     }
 
@@ -128,8 +158,17 @@ class ChatRoomActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    val timeLimit = document.getLong("time_limit") ?: 0L
-                    checkTimeLimitAndSetChatInputState(timeLimit)
+                    val timeLimitString = document.getString("time_limit")
+                    if (timeLimitString != null) {
+                        val timeLimitDate = parseDate(timeLimitString)
+                        if (timeLimitDate != null) {
+                            checkTimeLimitAndSetChatInputState(timeLimitDate)
+                        } else {
+                            Log.d("FirestoreData", "Error parsing time_limit date")
+                        }
+                    } else {
+                        Log.d("FirestoreData", "time_limit field is missing")
+                    }
                 } else {
                     Log.d("FirestoreData", "No such document")
                 }

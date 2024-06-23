@@ -144,7 +144,7 @@ class BookingFragment : Fragment() {
 
     fun calculateAge(birthDateString: String): Int {
         val today = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")  // Define the format of your birthdate string
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")  // Define the format of your birthdate string
         val birthDate = LocalDate.parse(birthDateString, formatter)
 
         val period = Period.between(birthDate, today)

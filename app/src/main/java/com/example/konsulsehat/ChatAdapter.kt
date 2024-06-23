@@ -58,7 +58,13 @@ class ChatAdapter(
                     .load(it)
                     .into(holder.tvImg)
             }
-            holder.tvLastChat.text = data["last_chat"].toString()
+
+            if (data["last_chat"] != null) {
+                holder.tvLastChat.text = data["last_chat"].toString()
+            }else {
+                holder.tvLastChat.text = "Click here to start chatting!"
+            }
+
         }else if (data["user_2"].toString() == userLoggedIn.toString()) {
             holder.tvNama.text = data["user_1_name"].toString()
 //            val profileUrl = data["profile_pict_user_1"].toString()
