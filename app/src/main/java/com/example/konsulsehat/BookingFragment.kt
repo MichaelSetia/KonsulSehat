@@ -13,25 +13,27 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
-import com.midtrans.sdk.corekit.core.MidtransSDK
-import com.midtrans.sdk.corekit.core.TransactionRequest
-import com.midtrans.sdk.corekit.core.themes.CustomColorTheme
-import com.midtrans.sdk.corekit.models.CustomerDetails
-import com.midtrans.sdk.corekit.models.ItemDetails
-import com.midtrans.sdk.corekit.models.snap.TransactionResult
-import com.midtrans.sdk.uikit.SdkUIFlowBuilder
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import androidx.lifecycle.Observer
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class BookingFragment : Fragment() {
+    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var userLoggedIn: String
+    private var userSaldo: Long? = null
     private lateinit var imgDok: ImageView
     private lateinit var namaDok: TextView
     private lateinit var hargaDok: TextView
@@ -50,7 +52,9 @@ class BookingFragment : Fragment() {
     private lateinit var patient_name:String
     private lateinit var patient_profile_pict:String
     private lateinit var psychiatrist_email:String
-    private var pricing:Double? = 0.0
+    private  lateinit var date :String
+    private  lateinit var userRef :QueryDocumentSnapshot
+    var pricing:Long? = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,12 +75,17 @@ class BookingFragment : Fragment() {
         dateKonseling = view.findViewById(R.id.inpDateKonseling)
         auth = FirebaseAuth.getInstance()
 
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        sharedViewModel.loggedInUser.observe(viewLifecycleOwner, Observer { loggedInUser ->
+            userLoggedIn = loggedInUser.toString()
+            getPatient()
+        })
+
         btnCancel.setOnClickListener{
             requireActivity().onBackPressed()
         }
         val dokter_email = arguments?.getString("email")
         db = FirebaseFirestore.getInstance()
-        getPatient()
 
         db.collection("users")
             .whereEqualTo("email", dokter_email)
@@ -84,25 +93,19 @@ class BookingFragment : Fragment() {
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     // Handle document data
-                    val dokter_nama = document.getString("name")
-                    val dokter_gelar = document.getString("gelar")
-                    val dokter_deskripsi = document.getString("deskripsi")
-                    val dokter_harga = document.getString("price")
-                    val dokter_rating = document.getDouble("rating")
-                    dokter_profilePictUrl = document.getString("profile_pict")!!
-                    psychiatrist_email = document.getString("email")!!
-//                    dokter_id = document.id
-                    if (document.getString("rate") != null){
-                        pricing = document.getString("rate")!!.toDouble()
-                    }
-                    else {
-                        pricing = 100000.toDouble()
-                    }
+                    val dokter_nama = document.data["name"] as String
+                    val dokter_gelar = document.data["gelar"] as String? ?: ""
+                    val dokter_deskripsi = document.data["deskripsi"] as String? ?: ""
+                    val dokter_harga = formatToRupiah(document.data["price"] as Long? ?: 100000)
+                    val dokter_rating = document.data["rate"] as Long? ?: 0
+                    dokter_profilePictUrl = document.data["profile_pict"] as String? ?: ""
+                    psychiatrist_email = document.data["email"] as String
+                    pricing = document.data["price"] as Long? ?: 100000
 
                     namaDok.text = dokter_nama
                     hargaDok.text = dokter_harga
                     deskDok.text = dokter_deskripsi
-                    rateDok.text = "Rp " + dokter_rating.toString()
+                    rateDok.text = dokter_rating.toString()
 
                     // Load image using Glide
                     dokter_profilePictUrl?.let {
@@ -120,16 +123,19 @@ class BookingFragment : Fragment() {
 
     fun getPatient(){
         db.collection("users")
-            .whereEqualTo("email", auth.currentUser!!.email)
+            .whereEqualTo("email", userLoggedIn)
             .get()
             .addOnSuccessListener { documents ->
-                val data = documents.documents[0]
+                for (doc in documents){
+                    userRef = doc
+                    val data = doc.data
+                    patient_age = calculateAge(data["birthdate"] as String? ?: LocalDate.now().toString())
+                    patient_email = data["email"] as String
+                    patient_name = data["name"] as String
+                    patient_profile_pict = data["profile_pict"] as String? ?: "-"
+                    patient_phone = data["phoneNum"] as String? ?: "-"
+                }
 
-                patient_age = calculateAge(data.getString("birthdate") ?: LocalDate.now().toString())
-                patient_email = data.getString("email")!!
-                patient_name = data.getString("name")!!
-                patient_profile_pict = data.getString("profile_pict") ?: "-"
-                patient_phone = data.getString("phoneNum") ?: "-"
             }
             .addOnFailureListener { exception ->
                 Log.w("FirestoreData", "Error getting documents: ", exception)
@@ -145,153 +151,238 @@ class BookingFragment : Fragment() {
         return period.years
     }
 
+    private fun formatToRupiah(number: Long): String {
+        val localeID = Locale("in", "ID")
+        val numberFormat = NumberFormat.getCurrencyInstance(localeID)
+        val formattedNumber = numberFormat.format(number)
+        return formattedNumber.replace("Rp", "Rp ").replace(",00", "")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        btnPayment.setOnClickListener{
-            val patient_info = patientInfo.text.toString()
-            val date = dateKonseling.date
-
-            val appointment = hashMapOf(
-                "patient_age" to patient_age,
-                "patient_email" to patient_email,
-                "patient_name" to patient_name,
-                "patient_info" to patient_info,
-                "patient_profile_pict" to patient_profile_pict,
-                "psychiatrist_email" to psychiatrist_email,
-                "psychiatrist_name" to namaDok.text,
-                "appointment_status" to 1,
-                "appointment_time" to date,
-                "price" to pricing,
-            )
-
-            // Appointment Status:
-            // 0 : cancelled
-            // 1 : belum bayar
-            // 2 : sudah bayar, appointment blm berlangsung / blm konsul
-            // 3 : sudah konsul
-
-
-            // ini dipindah ke codingan kalo sudah bayar
-            val db = FirebaseFirestore.getInstance()
-            db.collection("room_chat")
+        btnPayment.setOnClickListener {
+            db.collection("users")
+                .whereEqualTo("email", userLoggedIn)
                 .get()
-                .addOnSuccessListener { result ->
-                    var chatExists = false
-                    var chatDocumentId: String? = null
+                .addOnSuccessListener { documents ->
+                    var data = documents.first()
 
-                    for (document in result) {
-                        val chatData = document.data
-                        val user_1 = chatData["user_1"] as? String
-                        val user_2 = chatData["user_2"] as? String
-
-                        if ((user_1 == psychiatrist_email && user_2 == patient_email) || (user_1 == patient_email && user_2 == psychiatrist_email)) {
-                            chatExists = true
-                            chatDocumentId = document.id
-                            break
-                        }
+                    var saldoUser = data!!.get("saldo") as Long
+                    if (saldoUser < pricing!!) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Transaction declined due to insufficient balance",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@addOnSuccessListener
                     }
 
-                    if (chatExists) {
-                        // Update the appointment time in the existing chat document
-                        chatDocumentId?.let {
-                            db.collection("room_chat").document(it)
-                                .update("time_limit", date)
-                                .addOnSuccessListener {
-                                    Log.d("FirestoreData", "Appointment time updated successfully")
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w("FirestoreData", "Error updating appointment time", e)
-                                }
-                        }
-                    } else {
-                        // Add a new chat document
-                        val newChat = hashMapOf(
-                            "user_1" to psychiatrist_email,
-                            "user_1_name" to namaDok.text,
-                            "user_2" to patient_email,
-                            "user_2_name" to patient_name,
-                            "profile_pict_user_1" to imgDok,
-                            "profile_pict_user_2" to patient_profile_pict,
-                            "time_limit" to date
+                    var updatedSaldo = saldoUser.toInt() - pricing!!
+
+                    val userRef = db.collection("users").document(data.id)
+                    userRef.update(
+                        mapOf(
+                            "saldo" to updatedSaldo,
                         )
-
-                        db.collection("room_chat")
-                            .add(newChat)
-                            .addOnSuccessListener {
-                                Log.d("FirestoreData", "New chat room created successfully")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w("FirestoreData", "Error creating new chat room", e)
-                            }
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("FirestoreData", "Error getting documents: ", exception)
-                }
-
-            db.collection("appointment")
-                .add(appointment)
-                .addOnSuccessListener {
-                    SdkUIFlowBuilder.init()
-                        .setContext(requireContext())
-                        .setClientKey("SB-Mid-client-g2JImFSrBtMatNET") // Set your client key
-                        .enableLog(true)
-                        .setTransactionFinishedCallback( TransactionFinishedCallback {result ->
-                            when (result?.status) {
-                                TransactionResult.STATUS_SUCCESS -> {
-                                    Toast.makeText(requireContext(), "Payment Success", Toast.LENGTH_LONG).show()
-                                }
-                                TransactionResult.STATUS_PENDING -> {
-                                    Toast.makeText(requireContext(), "Payment Pending", Toast.LENGTH_LONG).show()
-                                    // Payment pending
-                                }
-                                TransactionResult.STATUS_FAILED -> {
-                                    Toast.makeText(requireContext(), "Payment Failed", Toast.LENGTH_LONG).show()
-                                    // Payment failed
-                                }
-                                TransactionResult.STATUS_INVALID -> {
-                                    Toast.makeText(requireContext(), "Payment Status Invalid", Toast.LENGTH_LONG).show()
-                                    // Payment invalid
-                                }
-                            }
-                        })
-                        .setColorTheme(CustomColorTheme("#5AA7A7", "#244242", "#F6F7F7"))
-                        .buildSDK()
-
-                    val clientKey = "SB-Mid-client-g2JImFSrBtMatNET"
-                    val transactionRequest = TransactionRequest(
-                        System.currentTimeMillis().toString(), // Unique transaction ID
-                        pricing!!, // Set total price
                     )
-                    val detail = ItemDetails(
-                        "PuxBIeQ9sm5spQJ", //random ID
-                        pricing!!,
-                        1,
-                        "1 on 1 Consultation"
-                        )
-                    val itemDetails = ArrayList<ItemDetails>()
-                    itemDetails.add(detail)
-                    uiKitDetails(transactionRequest)
-                    transactionRequest.itemDetails = itemDetails
+                        .addOnSuccessListener {
+                            val patient_info = patientInfo.text.toString()
+                            sharedViewModel.setSaldo(updatedSaldo.toLong())
 
-                    MidtransSDK.getInstance().transactionRequest = transactionRequest
-                    MidtransSDK.getInstance().startPaymentUiFlow(requireContext())
+                            val appointment = hashMapOf(
+                                "patient_age" to patient_age,
+                                "patient_email" to patient_email,
+                                "patient_name" to patient_name,
+                                "patient_info" to patient_info,
+                                "patient_profile_pict" to patient_profile_pict,
+                                "psychiatrist_email" to psychiatrist_email,
+                                "psychiatrist_name" to namaDok.text,
+                                "appointment_status" to 2,
+                                "appointment_time" to date,
+                                "price" to pricing,
+                            )
 
+                            // Appointment Status:
+                            // 0 : cancelled
+                            // 1 : belum bayar
+                            // 2 : sudah bayar, appointment blm berlangsung / blm konsul
+                            // 3 : konsul on going
+                            // 4 : sudah konsul
+
+                            db.collection("appointment")
+                                .add(appointment)
+                                .addOnSuccessListener {
+                                    // ini dipindah ke codingan kalo sudah bayar
+                                    db.collection("room_chat")
+                                        .get()
+                                        .addOnSuccessListener { result ->
+                                            var chatExists = false
+                                            var chatDocumentId: String? = null
+
+                                            for (document in result) {
+                                                val chatData = document.data
+                                                val user_1 = chatData["user_1"] as? String
+                                                val user_2 = chatData["user_2"] as? String
+
+                                                if ((user_1 == psychiatrist_email && user_2 == patient_email) || (user_1 == patient_email && user_2 == psychiatrist_email)) {
+                                                    chatExists = true
+                                                    chatDocumentId = document.id
+                                                    break
+                                                }
+                                            }
+
+                                            if (chatExists) {
+                                                // Update the appointment time in the existing chat document
+                                                chatDocumentId?.let {
+                                                    db.collection("room_chat").document(it)
+                                                        .update("time_limit", date)
+                                                        .addOnSuccessListener {
+                                                            Log.d(
+                                                                "FirestoreData",
+                                                                "Appointment time updated successfully"
+                                                            )
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            Log.w(
+                                                                "FirestoreData",
+                                                                "Error updating appointment time",
+                                                                e
+                                                            )
+                                                        }
+                                                }
+                                            } else {
+                                                // Add a new chat document
+                                                val newChat = hashMapOf(
+                                                    "user_1" to psychiatrist_email,
+                                                    "user_1_name" to namaDok.text,
+                                                    "user_2" to patient_email,
+                                                    "user_2_name" to patient_name,
+                                                    "profile_pict_user_1" to dokter_profilePictUrl,
+                                                    "profile_pict_user_2" to patient_profile_pict,
+                                                    "time_limit" to date
+                                                )
+
+                                                db.collection("room_chat")
+                                                    .add(newChat)
+                                                    .addOnSuccessListener {
+                                                        Log.d(
+                                                            "FirestoreData",
+                                                            "New chat room created successfully"
+                                                        )
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        Log.w(
+                                                            "FirestoreData",
+                                                            "Error creating new chat room",
+                                                            e
+                                                        )
+                                                    }
+                                            }
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            Log.w(
+                                                "FirestoreData",
+                                                "Error getting documents: ",
+                                                exception
+                                            )
+                                        }
+                                }
+                                .addOnFailureListener {
+                                    Log.w(
+                                        "FirestoreData",
+                                        "Error add appointment to FireStore: ",
+                                        it
+                                    )
+                                }
+
+                            Toast.makeText(
+                                requireActivity(),
+                                "Appointment request successful!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            requireActivity().onBackPressed()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("FirestoreData", "Appointment request failed", e)
+                        }
                 }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(),"Add to DB Failed : ${it.message}", Toast.LENGTH_LONG).show()
+                .addOnFailureListener { ex ->
+                    Toast.makeText(requireActivity(), "Data Fetching Failed", Toast.LENGTH_LONG)
+                        .show()
                 }
+        }
 
+        dateKonseling.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            // The user has selected a new date
+            val selectedDate = Calendar.getInstance()
+            selectedDate.set(year, month, dayOfMonth)
 
+            // Do something with the selected date (e.g., display it, store it)
+            date = SimpleDateFormat("dd/MM/yyyy").format(selectedDate.time)
         }
     }
-
-    private fun uiKitDetails(transactionRequest: TransactionRequest) {
-        val customerDetails = CustomerDetails()
-        customerDetails.customerIdentifier = patient_email
-        customerDetails.phone = patient_phone ?: "-"
-    }
 }
+//            db.collection("appointment")
+//                .add(appointment)
+//                .addOnSuccessListener {
+//                    SdkUIFlowBuilder.init()
+//                        .setContext(requireContext())
+//                        .setClientKey("SB-Mid-client-g2JImFSrBtMatNET") // Set your client key
+//                        .enableLog(true)
+//                        .setTransactionFinishedCallback( TransactionFinishedCallback {result ->
+//                            when (result?.status) {
+//                                TransactionResult.STATUS_SUCCESS -> {
+//                                    Toast.makeText(requireContext(), "Payment Success", Toast.LENGTH_LONG).show()
+//                                }
+//                                TransactionResult.STATUS_PENDING -> {
+//                                    Toast.makeText(requireContext(), "Payment Pending", Toast.LENGTH_LONG).show()
+//                                    // Payment pending
+//                                }
+//                                TransactionResult.STATUS_FAILED -> {
+//                                    Toast.makeText(requireContext(), "Payment Failed", Toast.LENGTH_LONG).show()
+//                                    // Payment failed
+//                                }
+//                                TransactionResult.STATUS_INVALID -> {
+//                                    Toast.makeText(requireContext(), "Payment Status Invalid", Toast.LENGTH_LONG).show()
+//                                    // Payment invalid
+//                                }
+//                            }
+//                        })
+//                        .setColorTheme(CustomColorTheme("#5AA7A7", "#244242", "#F6F7F7"))
+//                        .buildSDK()
+//
+//                    val clientKey = "SB-Mid-client-g2JImFSrBtMatNET"
+//                    val transactionRequest = TransactionRequest(
+//                        System.currentTimeMillis().toString(), // Unique transaction ID
+//                        pricing!!, // Set total price
+//                    )
+//                    val detail = ItemDetails(
+//                        "PuxBIeQ9sm5spQJ", //random ID
+//                        pricing!!,
+//                        1,
+//                        "1 on 1 Consultation"
+//                        )
+//                    val itemDetails = ArrayList<ItemDetails>()
+//                    itemDetails.add(detail)
+//                    uiKitDetails(transactionRequest)
+//                    transactionRequest.itemDetails = itemDetails
+//
+//                    MidtransSDK.getInstance().transactionRequest = transactionRequest
+//                    MidtransSDK.getInstance().startPaymentUiFlow(requireContext())
+//
+//                }
+//                .addOnFailureListener {
+//                    Toast.makeText(requireContext(),"Add to DB Failed : ${it.message}", Toast.LENGTH_LONG).show()
+//                }
+//
+
+
+
+//    private fun uiKitDetails(transactionRequest: TransactionRequest) {
+//        val customerDetails = CustomerDetails()
+//        customerDetails.customerIdentifier = patient_email
+//        customerDetails.phone = patient_phone ?: "-"
+//    }
 

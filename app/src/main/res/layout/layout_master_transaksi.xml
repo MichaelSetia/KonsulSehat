@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp">
+
+    <TextView
+        android:id="@+id/tvDateMasterTransaksi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tvIdMasterTransaksi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="ID Transaksi"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnDetailMasterTransaksi"
+        android:layout_width="wrap_content"
+        android:layout_height="41dp"
+        android:backgroundTint="@color/blue_primary"
+        android:gravity="top"
+        android:includeFontPadding="false"
+        android:paddingVertical="0dp"
+        android:text=". . ."
+        android:textSize="24sp" />
+</LinearLayout>
