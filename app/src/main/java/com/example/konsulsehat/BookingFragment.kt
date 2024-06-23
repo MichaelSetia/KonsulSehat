@@ -192,11 +192,13 @@ class BookingFragment : Fragment() {
                             sharedViewModel.setSaldo(updatedSaldo.toLong())
 
                             val appointment = hashMapOf(
+                                "appointment_id" to generateAppointmentId(),
                                 "patient_age" to patient_age,
                                 "patient_email" to patient_email,
                                 "patient_name" to patient_name,
                                 "patient_info" to patient_info,
                                 "patient_profile_pict" to patient_profile_pict,
+                                "psychiatrist_profile_pict" to dokter_profilePictUrl,
                                 "psychiatrist_email" to psychiatrist_email,
                                 "psychiatrist_name" to namaDok.text,
                                 "appointment_status" to 2,
@@ -322,6 +324,12 @@ class BookingFragment : Fragment() {
             // Do something with the selected date (e.g., display it, store it)
             date = SimpleDateFormat("dd/MM/yyyy").format(selectedDate.time)
         }
+    }
+
+    fun generateAppointmentId(): String {
+        val initials = patient_name.trim(' ').substring(0, 1) + namaDok.text.trim(' ').substring(0, 1)
+        val randomInt = (1000..9999).random()
+        return "$initials-$randomInt"
     }
 }
 //            db.collection("appointment")

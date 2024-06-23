@@ -17,7 +17,7 @@ import com.example.konsulsehat.R
 class AppointmentAdapter(
     var AppointmentList: List<Map<String, Any>>,
 //    var ChatList: List<Map<String, Any>>,
-    var userLoggedIn: String,
+//    var userLoggedIn: String,
     clickListener: AppointmentAdapter.ClickListener
     ): RecyclerView.Adapter<AppointmentAdapter.ViewHolder>() {
 
@@ -46,14 +46,22 @@ class AppointmentAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val th = AppointmentList[position]
 //        val chat = ChatList[position]
-        holder.tvNama.text = th["Patient_name"].toString()
-        holder.tvUmur.text = th["Patient_age"].toString()
-        holder.tvJam.text = "[6-18-2024 12:10] - [6-19-2024 12:10]"
-        val profilePictUrl = th["Patient_profile_pict"] as? String
+        holder.tvNama.text = th["patient_name"].toString()
+        holder.tvUmur.text = th["patient_age"].toString()
+//        holder.tvJam.text = "[6-18-2024 12:10] - [6-19-2024 12:10]"
+        holder.tvJam.text = th["appointment_time"] as String
+        val profilePictUrl = th["patient_profile_pict"] as? String
         profilePictUrl?.let {
             Glide.with(holder.tvImgPasien.context)
                 .load(it)
                 .into(holder.tvImgPasien)
+        }
+
+        if (th["appointment_status"] as Long == 4.toLong()){
+            holder.btnChatPasien.isEnabled = false
+        }
+        else{
+            holder.btnChatPasien.isEnabled = true
         }
 
         holder.btnChatPasien.setOnClickListener{

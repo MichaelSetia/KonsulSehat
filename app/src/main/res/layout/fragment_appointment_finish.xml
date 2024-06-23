@@ -19,6 +19,7 @@
             android:textSize="30sp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvListAppointmentFinish"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

@@ -22,8 +22,6 @@ import com.google.firebase.ktx.Firebase
 class AppointmentUpcoming : Fragment(), AppointmentAdapter.ClickListener{
 
     private lateinit var rvAppointment: RecyclerView
-    var patientList = mutableListOf<Map<String, Any>>()
-    var chatList = mutableListOf<Map<String, Any>>()
     private lateinit var appointmentAdapter: AppointmentAdapter
     private var loggedInUser: String? = null
     private lateinit var auth: FirebaseAuth
@@ -64,7 +62,8 @@ class AppointmentUpcoming : Fragment(), AppointmentAdapter.ClickListener{
 
         // Step 1: Fetch appointments
         db.collection("appointment")
-            .whereEqualTo("Psychiatrist_email", userLoggedIn)
+            .whereEqualTo("psychiatrist_email", userLoggedIn)
+            .whereEqualTo("appointment_status", 2)
             .get()
             .addOnSuccessListener { appointmentResult ->
                 // Create a list to hold mutable maps of appointments
@@ -73,7 +72,7 @@ class AppointmentUpcoming : Fragment(), AppointmentAdapter.ClickListener{
                 for (document in appointmentResult) {
                     val appointment = document.data.toMutableMap() // Mutable map to add roomId later
                     mutablePatientList.add(appointment)
-                    a.text = "List Appointment " + (appointment["Psychiatrist_name"] as String)
+                    a.text = "List Appointment " + (appointment["psychiatrist_name"] as String)
                 }
 
                 // Step 2: Fetch room chats after appointments are fetched
@@ -101,14 +100,14 @@ class AppointmentUpcoming : Fragment(), AppointmentAdapter.ClickListener{
 
                         // Step 3: Update the mutablePatientList with the roomId
                         for (appointment in mutablePatientList) {
-                            val patientEmail = appointment["Patient_email"] as? String
+                            val patientEmail = appointment["patient_email"] as? String
                             if (patientEmail != null && roomChatMap.containsKey(patientEmail)) {
                                 appointment["roomId"] = roomChatMap[patientEmail]!!
                             }
                         }
 
                         // Step 4: Set the adapter
-                        appointmentAdapter = AppointmentAdapter(mutablePatientList, userLoggedIn, this)
+                        appointmentAdapter = AppointmentAdapter(mutablePatientList, this)
                         rvAppointment.adapter = appointmentAdapter
                     }
                     .addOnFailureListener { exception ->
