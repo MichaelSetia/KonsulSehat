@@ -17,6 +17,7 @@
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvJournal"
         android:layout_width="match_parent"
         android:layout_height="508dp"
         android:layout_marginTop="20dp" />
