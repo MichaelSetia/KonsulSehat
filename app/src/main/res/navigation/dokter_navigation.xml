@@ -21,4 +21,9 @@
     <action
         android:id="@+id/action_global_profileDokterFragment"
         app:destination="@id/profileDokterFragment" />
+    <fragment
+        android:id="@+id/listPatienFragment"
+        android:name="com.example.konsulsehat.dokter.ListPatienFragment"
+        android:label="fragment_list_patien"
+        tools:layout="@layout/fragment_list_patien" /><action android:id="@+id/action_global_listPatienFragment" app:destination="@id/listPatienFragment"/>
 </navigation>
