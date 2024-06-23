@@ -15,6 +15,9 @@
         android:theme="@style/Theme.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".Admin.DetailMasterTransaksiActivity"
+            android:exported="false" />
+        <activity
             android:name=".DetailJournalActivity"
             android:exported="false" />
         <activity

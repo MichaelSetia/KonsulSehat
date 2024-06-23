@@ -33,12 +33,8 @@ class MasterUserFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.rvMasterUser)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        fetchChatDataFromFirestore()
-        val context = requireActivity()
-        return view
-    }
+//        fetchChatDataFromFirestore()
 
-    private fun fetchChatDataFromFirestore() {
         val db = FirebaseFirestore.getInstance()
         db.collection("users")
             .get()
@@ -58,19 +54,57 @@ class MasterUserFragment : Fragment() {
             }
 
         tvSearch.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    // Nothing needed here
-                }
+            override fun afterTextChanged(s: Editable?) {
+                // Nothing needed here
+            }
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    // Nothing needed here
-                }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Nothing needed here
+            }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val query = s.toString().trim()
-                    searchUserByEmail(query)
-                }
-            })
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s.toString().trim()
+                searchUserByEmail(query)
+            }
+        })
+
+        val context = requireActivity()
+        return view
+    }
+
+    private fun fetchChatDataFromFirestore() {
+//        val db = FirebaseFirestore.getInstance()
+//        db.collection("users")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                for (document in result) {
+//                    val userData = document.data
+//                    val role = userData["role"] as? String
+//                    if (role == "Patient" ) {
+//                        userList.add(userData)
+//                    }
+//                }
+//                userAdapter = MasterUserAdapter(userList,context)
+//                recyclerView.adapter = userAdapter
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w("FirestoreData", "Error getting documents: ", exception)
+//            }
+//
+//        tvSearch.addTextChangedListener(object : TextWatcher {
+//                override fun afterTextChanged(s: Editable?) {
+//                    // Nothing needed here
+//                }
+//
+//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                    // Nothing needed here
+//                }
+//
+//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                    val query = s.toString().trim()
+//                    searchUserByEmail(query)
+//                }
+//            })
     }
 
 

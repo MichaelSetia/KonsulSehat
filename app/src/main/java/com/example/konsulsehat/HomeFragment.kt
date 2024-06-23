@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
                     .addOnSuccessListener { documents ->
                         val document = documents.documents[0]
                         if (!documents.isEmpty) {
-                            userName = document.getString("name")!!
+                            userName = document.getString("name") ?: "User"
                         } else {
                             // Debug log
                             Log.d("SignInActivity", "No document found for email: ${document.getString("email")!!}")
