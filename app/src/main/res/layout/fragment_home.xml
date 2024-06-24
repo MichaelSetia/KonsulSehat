@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <!-- Here you put the rest of your current view-->
+
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
@@ -88,6 +94,7 @@
                         android:id="@+id/btnAppointment"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
+                        android:backgroundTint="@color/blue_primary"
                         android:drawableLeft="@drawable/asset_calendar_appointment"
                         android:text="Appointment Reminder"
                         android:textColor="#153933"
@@ -107,6 +114,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
+                        android:backgroundTint="@color/blue_primary"
                         android:text="Schedule Now"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -121,14 +129,65 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Logout" />
+                android:layout_marginTop="15dp"
+                android:background="@drawable/myrect"
+                android:backgroundTint="#FCFCFC"
+                android:elevation="2dp"
+                android:foregroundTint="#FCFCFC"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView43"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/asset_user_ongoing"
+                    android:text="Your Appointments"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAppointmentUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/myrect"
+                android:backgroundTint="#FCFCFC"
+                android:elevation="2dp"
+                android:foregroundTint="#FCFCFC"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView44"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/asset_finished_user"
+                    android:text="Your Finished Appointments"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFinishedAppointmentUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
 </FrameLayout>
+</ScrollView>

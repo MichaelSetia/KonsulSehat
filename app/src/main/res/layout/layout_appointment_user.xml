@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imgProfileDoktorAppointment"
+            android:layout_width="40dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            tools:srcCompat="@drawable/icon_profile" />
+
+        <LinearLayout
+            android:layout_width="165dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtNamaDoktorAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nama Doktor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtJamAppointmentUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jam"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/btnChatAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/blue_primary"
+                android:src="@drawable/asset_chat_appointment"
+                tools:src="@drawable/asset_chat_appointment" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
