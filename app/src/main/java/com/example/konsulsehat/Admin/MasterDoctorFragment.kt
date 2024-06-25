@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.konsulsehat.R
@@ -19,6 +20,8 @@ class MasterDoctorFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var doctorAdapter: MasterDoctorAdapter
     private lateinit var tvSearch: EditText
+    private lateinit var tvTotalDoctor: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,6 +29,7 @@ class MasterDoctorFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_master_doctor, container, false)
         tvSearch = view.findViewById(R.id.tvSearchDoctorAdmin)
+        tvTotalDoctor = view.findViewById(R.id.tvTotalDoctorAdmin)
         recyclerView = view.findViewById(R.id.rvMasterDoctor)
         recyclerView.layoutManager = LinearLayoutManager(context)
         fetchChatDataFromFirestore()
@@ -39,13 +43,16 @@ class MasterDoctorFragment : Fragment() {
         db.collection("users")
             .get()
             .addOnSuccessListener { result ->
+                var doctorCount = 0
                 for (document in result) {
                     val userData = document.data
                     val role = userData["role"] as? String
                     if (role == "Psychiatrist" ) {
                         userList.add(userData)
+                        doctorCount++
                     }
                 }
+                setTotalDoctor(doctorCount)
                 doctorAdapter = MasterDoctorAdapter(userList,context)
                 recyclerView.adapter = doctorAdapter
             }
@@ -75,5 +82,9 @@ class MasterDoctorFragment : Fragment() {
             name.contains(query, ignoreCase = true)
         }
         doctorAdapter.updateList(filteredList)
+    }
+
+    fun setTotalDoctor (total:Int) {
+        tvTotalDoctor.text = "Total Doctor : " + total.toString()
     }
 }

@@ -54,12 +54,16 @@ class DetailMasterPatientActivity : AppCompatActivity() {
                             .into(binding.imgProfileDetailPatient)
                     }
                     val name = userData["name"] as? String
-                    Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->
                 Log.e("FirestoreData", "Error getting user data: ", exception)
             }
+
+        binding.btnBackToMasterPatient.setOnClickListener {
+            finish()
+        }
 
         binding.btnSaveEditDetailPatient.setOnClickListener {
             val updatedName = binding.tvFullNameDetailPatient.text.toString().trim()
