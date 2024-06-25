@@ -71,7 +71,7 @@ class DetailMasterTransaksiActivity : AppCompatActivity() {
                 Log.e("FirestoreData", "Error getting user data: ", it)
             }
 
-        binding.btnBackDetailMasterTransaksi.setOnClickListener{
+        binding.btnBackToMasterTransaksi.setOnClickListener{
             finish()
         }
     }

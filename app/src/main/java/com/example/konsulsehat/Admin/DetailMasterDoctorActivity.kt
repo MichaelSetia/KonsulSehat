@@ -61,7 +61,7 @@ class DetailMasterDoctorActivity : AppCompatActivity() {
                             .into(binding.imgProfileDetailDoctor)
                     }
                     val name = userData["name"] as? String
-                    Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->

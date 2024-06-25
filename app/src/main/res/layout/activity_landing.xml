@@ -42,7 +42,9 @@
         android:layout_marginBottom="68dp"
         android:layout_toStartOf="@+id/btnRegister"
         android:text="Sign In"
-        app:cornerRadius="8dp" />
+        android:textColor="@color/blue_primary"
+        app:cornerRadius="8dp"
+        app:rippleColor="@color/blue_primary" />
 
     <Button
         android:id="@+id/btnRegister"
@@ -52,6 +54,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="55dp"
         android:layout_marginBottom="69dp"
+        android:backgroundTint="@color/blue_primary"
         android:text="Sign Up"
         app:cornerRadius="8dp" />
 

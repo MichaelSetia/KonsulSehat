@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.konsulsehat.ChatAdapter
@@ -21,6 +22,7 @@ class MasterUserFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var userAdapter: MasterUserAdapter
     private lateinit var tvSearch: EditText
+    private lateinit var tvTotalPatient: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +32,7 @@ class MasterUserFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_master_user, container, false)
 
         tvSearch = view.findViewById(R.id.tvSearchPatientAdmin)
+        tvTotalPatient = view.findViewById(R.id.tvTotalPatientAdmin)
 
         recyclerView = view.findViewById(R.id.rvMasterUser)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -39,13 +42,16 @@ class MasterUserFragment : Fragment() {
         db.collection("users")
             .get()
             .addOnSuccessListener { result ->
+                var patientCount = 0
                 for (document in result) {
                     val userData = document.data
                     val role = userData["role"] as? String
                     if (role == "Patient" ) {
                         userList.add(userData)
+                        patientCount++
                     }
                 }
+                setTotalPatient(patientCount)
                 userAdapter = MasterUserAdapter(userList,context)
                 recyclerView.adapter = userAdapter
             }
@@ -70,6 +76,10 @@ class MasterUserFragment : Fragment() {
 
         val context = requireActivity()
         return view
+    }
+
+    fun setTotalPatient (total:Int) {
+        tvTotalPatient.text = "Total Patient : " + total.toString()
     }
 
     private fun fetchChatDataFromFirestore() {
